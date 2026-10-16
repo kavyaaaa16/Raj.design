@@ -108,9 +108,10 @@ export function Testimonials() {
   const gridRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: gridRef,
-    offset: ['start end', 'start center'],
+    offset: ['start end', 'end start'],
   });
-  const headingFilter = useTransform(scrollYProgress, [0, 1], ['blur(0px)', 'blur(1.5px)']);
+  const headingFilter = useTransform(scrollYProgress, [0, 1], ['blur(0px)', 'blur(3px)']);
+  const headingScale = useTransform(scrollYProgress, [0, 1], [1, 0.7]);
   return (
     <section className={styles.section} id="testimonials" aria-labelledby="testimonials-title">
       <motion.header className={styles.header} style={{ filter: headingFilter }}>
@@ -124,9 +125,9 @@ export function Testimonials() {
           <Pill tone="sky">Aesthetics are nice</Pill>
         </motion.div>
 
-        <h2 className={styles.heading} id="testimonials-title">
+        <motion.h2 className={styles.heading} id="testimonials-title" style={{ scale: headingScale }}>
           Okay, but will it work?
-        </h2>
+        </motion.h2>
 
         <motion.div
           className={styles.badgeBottom}
