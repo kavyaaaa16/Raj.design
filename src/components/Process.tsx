@@ -38,7 +38,7 @@ const ENTER: ReadonlyArray<readonly [number, number]> = [
   [0.32, 0.44],
 ];
 const BOX_IN = [0.46, 0.66] as const;
-const COLLECT = [0.6, 0.82] as const;
+const COLLECT = [0.6, 0.68] as const;
 
 interface StepCardProps {
   progress: MotionValue<number>;
@@ -54,9 +54,9 @@ function StackedStep({ progress, index, rotate, children }: StepCardProps) {
   const rest = `${-index * 3.5}%`;
 
   const immediate = index === 0;
-  const y = useTransform(progress, [start, settled, COLLECT[0], COLLECT[1]], immediate ? [rest, rest, rest, '52%'] : ['70%', rest, rest, '52%']);
+  const y = useTransform(progress, [start, settled, COLLECT[0], COLLECT[1]], immediate ? [rest, rest, rest, '15%'] : ['70%', rest, rest, '15%']);
   const scale = useTransform(progress, [start, settled, COLLECT[0], COLLECT[1]], immediate ? [1, 1, 1, 0.24] : [0.88, 1, 1, 0.24]);
-  const opacity = useTransform(progress, [start, start + 0.04, COLLECT[1] - 0.08, COLLECT[1]], immediate ? [1, 1, 1, 0] : [0, 1, 1, 0]);
+  const opacity = useTransform(progress, [start, start + 0.04, COLLECT[1] - 0.08, COLLECT[1]], immediate ? [1, 1, 1, 1] : [0, 1, 1, 1]);
   const rot = useTransform(progress, [start, settled], immediate ? [rotate, rotate] : [0, rotate]);
 
   return (
