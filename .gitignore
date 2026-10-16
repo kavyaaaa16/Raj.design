@@ -1,0 +1,14 @@
+node_modules
+dist
+.DS_Store
+
+# Local Figma personal access token — never commit
+# (*.local also covers this, kept explicit so it's obvious)
+.env.local
+*.local
+
+# NOTE: public/assets/ is deliberately NOT ignored.
+# Figma export URLs expire, so the fetched images are the durable copy —
+# commit them and the project builds from a clean clone with no network,
+# no token and no Figma access. `npm run assets` is then only needed when
+# a design actually changes.

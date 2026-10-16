@@ -1,0 +1,195 @@
+.section {
+  position: relative;
+  overflow-x: clip;
+  padding-block: clamp(5rem, 16vw, 9rem);
+  width: min(100% - var(--gutter) * 2, var(--page-max));
+  margin-inline: auto;
+}
+
+/* ── Header ────────────────────────────────────────────────────────────── */
+/*
+ * Figma wraps this as "A Collection / Of My Recent / Work", which only happens
+ * if the measure is just wider than the longest line. Set in em so it tracks
+ * the heading's own font size at every width — ch is keyed to the "0" glyph and
+ * is badly misleading in this display face.
+ */
+.header {
+  position: relative;
+  margin-bottom: clamp(4rem, 12vw, 7rem);
+}
+
+.badge {
+  margin-bottom: clamp(0.25rem, 1vw, 0.5rem);
+}
+
+.header > div:first-child {
+  display: flex;
+  justify-content: flex-end;
+  width: min(100%, 6.7em);
+  font-size: 52px;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 52px;
+  /* em resolves against THIS element's size, so the measure scales with it */
+  position: relative;
+  max-width: 6.7em; /* 313 / 47 — Figma's text block, so it breaks into three lines */
+  line-height: 46.8px;
+  letter-spacing: -1.56px;
+  text-transform: capitalize;
+  margin: 0;
+}
+
+/*
+ * Sits in the text flow as the headline's final element, so it wraps with the
+ * words rather than covering them. `vertical-align` pulls it onto the last
+ * line's optical centre.
+ */
+.vinyl {
+  position: absolute;
+  right: 0;
+  top: 1.8em;
+  display: block;
+  width: clamp(4.5rem, 18vw, 7.5rem);
+  will-change: transform;
+}
+
+/* ── Card grid ─────────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  gap: clamp(3rem, 9vw, 5rem);
+  justify-items: center;
+}
+
+/* ── Browser window card, node 1:2045 ──────────────────────────────────── */
+.card {
+  position: relative;
+  width: min(100%, 324px);
+  border-radius: 16.08px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8.6px);
+  -webkit-backdrop-filter: blur(8.6px);
+  border: 1px solid var(--white);
+  box-shadow: var(--shadow-window);
+  will-change: transform;
+  transform-origin: center;
+}
+
+.link {
+  display: block;
+  border-radius: inherit;
+}
+
+/* Title bar */
+.chrome {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 32px;
+  padding: 12px;
+  border-radius: 16px 16px 0 0;
+  background: rgba(209, 209, 209, 0.18);
+  backdrop-filter: blur(3.35px);
+  -webkit-backdrop-filter: blur(3.35px);
+  border-bottom: 0.5px solid var(--white);
+}
+
+.light {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.red { background: var(--traffic-red); }
+.amber { background: var(--traffic-amber); }
+.green { background: var(--traffic-green); }
+
+/* Screenshot */
+.screen {
+  margin: 0 6.5px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--ink);
+  aspect-ratio: 311 / 218; /* exact Figma ratio, node 1:2064 */
+  box-shadow: 0 2.679px 12.727px rgba(0, 0, 0, 0.24);
+}
+
+.shot {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Caption row */
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 38px;
+  padding: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(0.8125rem, 3.3vw, 0.875rem);
+  font-weight: 600;
+  letter-spacing: -0.057em;
+  color: var(--ink-soft);
+  line-height: 1;
+}
+
+.tags {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: clamp(0.5625rem, 2.4vw, 0.625rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  color: var(--ink-softer);
+  line-height: 1;
+}
+
+/* Paperclip pinned over the top edge */
+.clip {
+  position: absolute;
+  top: -18px;
+  left: 62%;
+  width: 30px;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.18));
+}
+
+/* ── Wider screens ─────────────────────────────────────────────────────── */
+@media (min-width: 760px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(3.5rem, 7vw, 6rem) clamp(2rem, 5vw, 4rem);
+    justify-items: stretch;
+  }
+
+  .card {
+    width: 100%;
+  }
+
+  /* Stagger the second column downward so the angles read as a pinboard */
+  .grid > :nth-child(even) {
+    margin-top: clamp(2rem, 6vw, 4.5rem);
+  }
+}
+
+@media (min-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid > :nth-child(even) {
+    margin-top: 0;
+  }
+
+  .grid > :nth-child(3n + 2) {
+    margin-top: clamp(2.5rem, 5vw, 5rem);
+  }
+}

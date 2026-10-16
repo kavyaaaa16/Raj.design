@@ -1,0 +1,24 @@
+.eyes {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.eye {
+  width: 53px;
+  height: 53px;
+  border-radius: 50%;
+  background: var(--white);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.pupil {
+  display: block;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  background: var(--ink);
+  will-change: transform;
+}

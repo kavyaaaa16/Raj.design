@@ -1,0 +1,30 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-accent);
+  line-height: 1.2;
+  white-space: nowrap;
+  /* The 4px white ring from Figma, drawn inside the box */
+  box-shadow: inset 0 0 0 4px var(--white);
+}
+
+.md {
+  padding: 0.625rem 1.375rem;
+  font-size: var(--step-lead);
+  min-height: 44px;
+}
+
+.sm {
+  padding: 0.625rem 1rem;
+  font-size: clamp(1rem, 4vw, 1.125rem);
+  min-height: 42px;
+}
+
+.sky { background: var(--sky); color: var(--ink); }
+.periwinkle { background: var(--periwinkle); color: var(--ink); }
+.lilac { background: var(--lilac); color: var(--ink); }
+.paper { background: var(--paper); color: var(--ink); }
+.olive { background: var(--olive); color: var(--white); }

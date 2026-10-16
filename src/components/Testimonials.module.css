@@ -1,0 +1,214 @@
+.section {
+  position: relative;
+  width: min(100% - var(--gutter) * 2, var(--page-max));
+  margin-inline: auto;
+  padding-block: clamp(5rem, 16vw, 9rem);
+}
+
+/* ── Heading ───────────────────────────────────────────────────────────── */
+.header {
+  position: sticky;
+  top: 50%;
+  z-index: 0;
+  transform: translateY(-50%);
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-block: clamp(3.5rem, 11vw, 5rem);
+  text-align: center;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--step-section);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  margin: 0;
+  max-width: 7.5em;
+
+  margin-inline: auto;
+}
+
+.badgeTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.badgeBottom {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.heart {
+  position: absolute;
+  left: clamp(-0.25rem, 1vw, 1rem);
+  bottom: clamp(2.5rem, 9vw, 4rem);
+  width: clamp(3rem, 13vw, 4.5rem);
+  pointer-events: none;
+}
+
+.camera {
+  position: absolute;
+  right: clamp(-0.5rem, 1vw, 0rem);
+  top: clamp(-1.5rem, -2vw, 0rem);
+  width: clamp(4.5rem, 20vw, 7rem);
+  rotate: -15deg;
+  pointer-events: none;
+}
+
+/* ── Cards ─────────────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  margin-top: 100svh;
+  gap: clamp(3.5rem, 11vw, 5rem);
+  justify-items: center;
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  width: min(100%, 385px);
+  padding: clamp(1.75rem, 6vw, 2.5rem) clamp(1.25rem, 5vw, 1.5rem);
+  background: var(--paper);
+  border-radius: var(--radius-note);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 3vw, 1.25rem);
+}
+
+.client {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--step-title);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+.quote {
+  margin: 0;
+  font-family: var(--font-accent);
+  font-size: var(--step-lead);
+  line-height: 1.2;
+  text-wrap: pretty;
+}
+
+.aside {
+  font-family: var(--font-sans);
+  font-size: var(--step-title);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+/* ── Taped result note ─────────────────────────────────────────────────── */
+.note {
+  position: relative;
+  container-type: inline-size;
+  width: min(100%, 308px);
+  aspect-ratio: 1;
+  align-self: center;
+  margin-top: 0.5rem;
+  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.15));
+}
+
+.noteBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Sized against the note (308px in Figma), not the viewport — see Process */
+.noteBody {
+  position: absolute;
+  inset: 14% 8% 12% 12%;
+  display: flex;
+  flex-direction: column;
+  gap: 3cqw;
+  rotate: -3deg;
+}
+
+.resultsLabel {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 9.7cqw; /* 30 / 308 */
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  rotate: -1deg;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.2cqw;
+}
+
+/* Result pills follow the note too, so three always fit */
+.results span {
+  font-size: 5.8cqw; /* 18 / 308 */
+  min-height: 0;
+  padding: 2.6cqw 4.5cqw;
+  box-shadow: inset 0 0 0 1.3cqw var(--white);
+}
+
+/* ── Clipped photo ─────────────────────────────────────────────────────── */
+.photo {
+  position: absolute;
+  top: clamp(-2rem, -3.5vw, -1rem);
+  right: clamp(-1.25rem, -2vw, -0.25rem);
+  width: clamp(4.5rem, 20vw, 5.75rem);
+  rotate: 16deg;
+}
+
+.photoImg {
+  width: 100%;
+  border: 6px solid var(--white);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+.photoClip {
+  position: absolute;
+  top: -24%;
+  right: -16%;
+  width: 52%;
+  rotate: -46deg;
+}
+
+/* ── Wider screens ─────────────────────────────────────────────────────── */
+@media (min-width: 860px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(3rem, 6vw, 4.5rem);
+    justify-items: stretch;
+  }
+
+  .card {
+    width: 100%;
+  }
+
+  .grid > :nth-child(even) {
+    margin-top: clamp(2rem, 5vw, 3.5rem);
+  }
+}
+
+@media (min-width: 1180px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid > :nth-child(even) {
+    margin-top: 0;
+  }
+
+  .grid > :nth-child(2) {
+    margin-top: clamp(2rem, 4vw, 3.5rem);
+  }
+}

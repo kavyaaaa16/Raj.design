@@ -1,0 +1,322 @@
+.section {
+  position: relative;
+
+  width: min(100% - var(--gutter) * 2, var(--page-max));
+  margin-inline: auto;
+  padding-block: clamp(5rem, 16vw, 9rem) 0;
+}
+
+/* ── Heading ───────────────────────────────────────────────────────────── */
+/*
+ * Measured in em so the wrap tracks the heading's own font size and holds its
+ * break instead of stretching to a fixed box and colliding with the badges and
+ * the eye/camera in the margins. (ch is keyed to the "0" glyph, which in Bagel
+ * Fat One is much narrower than its average letter — it collapses the heading
+ * to one word per line.)
+ */
+.header {
+  position: sticky;
+  top: 0;
+
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-block: clamp(3.5rem, 11vw, 5.5rem);
+  text-align: center;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--step-section);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  margin: 0;
+  /* em resolves against THIS element's size, so the measure scales with it */
+  max-width: 9em;
+}
+
+.badgeTop {
+  position: absolute;
+  top: clamp(0.5rem, 3vw, 1.25rem);
+  left: 0;
+  z-index: 2;
+}
+
+.badgeBottom {
+  position: absolute;
+  bottom: clamp(0.5rem, 3vw, 1.25rem);
+  right: 0;
+  z-index: 2;
+}
+
+/*
+ * Decorations live outside the text column. At 425px Figma has them just
+ * clipping the frame edge; on desktop the column is far narrower than the
+ * section, so they move further out rather than sliding onto the words.
+ */
+.eye {
+  position: absolute;
+  left: clamp(-7rem, -4vw, -1rem);
+  bottom: clamp(-1rem, 1vw, 0.5rem);
+  width: clamp(4.25rem, 18vw, 6.5rem);
+  pointer-events: none;
+}
+
+.camera {
+  position: absolute;
+  right: clamp(-7rem, -4vw, -1rem);
+  top: clamp(-1.5rem, -1vw, 0rem);
+  width: clamp(4.5rem, 20vw, 7rem);
+  rotate: -15deg;
+  pointer-events: none;
+}
+
+/* ── Pinned scene ──────────────────────────────────────────────────────── */
+/*
+ * Scroll length for the whole sequence: three steps rise and pile (0 → 0.42),
+ * the box climbs in (0.44 → 0.66), it collects the pile (0.58 → 0.80), the
+ * label lands (0.78 → 0.88). ~4.2 screens of scroll keeps each beat readable
+ * without feeling like the page has stopped responding.
+ */
+.scene {
+  position: relative;
+
+  height: 420svh;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+/* Every layer is centred on the same point, so the pile reads as one stack */
+/*
+ * Every layer is centred on the same point so the pile reads as one stack. The
+ * pile sits slightly above centre, leaving the lower third of the stage for the
+ * box to climb into.
+ */
+/*
+ * The container lives on the wrapper, not on the cards themselves. A card that
+ * declares `container-type` on its own box does not give its children a usable
+ * query size here, so cqw collapsed and the step text rendered at ~11px. The
+ * wrapper has a stable layout width (min(78vw, 340px)), which is what the text
+ * should scale against.
+ */
+.stackItem,
+.boxLayer {
+  container-type: inline-size;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  /* Applied before the motion transform, which composes on top */
+  translate: -50% -50%;
+  width: min(78vw, 340px);
+  display: flex;
+  justify-content: center;
+  will-change: transform, opacity;
+}
+
+.boxLayer {
+  top: 50%;
+}
+
+.boxLayer {
+  z-index: 20; /* above every stackItem, so notes vanish behind the box */
+  width: min(92vw, 460px);
+}
+
+.boxInner {
+  position: relative;
+
+  width: 100%;
+}
+
+.box {
+  width: 100%;
+}
+
+/*
+ * Figma puts the label at 213/488 across and 99.35/235.35 down — inside the
+ * box, beside the face. Anchoring it to .boxInner (the image itself) rather
+ * than to an outer wrapper is what keeps those percentages honest; the old
+ * version measured against a padded parent and rode up to the box's top edge.
+ */
+.deliveryCopy {
+  position: absolute;
+  left: 43.6%;
+  top: 42.2%;
+  width: 52%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6cqw;
+}
+
+.deliveryTitle {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 6.15cqw; /* 30 / 488 */
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.deliveryLead {
+  font-family: var(--font-accent);
+  font-size: 4.1cqw; /* 20 / 488 */
+  line-height: 1.2;
+  max-width: 11ch;
+}
+
+/* ── 01 · paper note ───────────────────────────────────────────────────── */
+.note {
+  position: relative;
+
+  width: min(100%, 363px);
+  aspect-ratio: 1;
+  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.15));
+}
+
+.noteBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/*
+ * Type scales with the note, not the viewport. The note caps at 363px while a
+ * viewport-sized font keeps growing, which overflowed the paper on wide
+ * screens. 20px on a 363px note is 5.5cqw.
+ */
+.noteBody {
+  position: absolute;
+  inset: 21% 8% 10% 15%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3.2cqw;
+}
+
+.stepLabel {
+  font-family: var(--font-accent);
+  font-size: 5.5cqw;
+  line-height: 1.2;
+  color: var(--ink-muted);
+}
+
+.noteText {
+  font-family: var(--font-accent);
+  font-size: 5.5cqw;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+/* ── 02 / 03 · index cards ─────────────────────────────────────────────── */
+.card {
+  position: relative;
+
+  width: min(100%, 385px);
+  padding: 7cqw;
+  border-radius: var(--radius-note);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 3.5cqw;
+}
+
+.cardCream {
+  background: var(--paper);
+}
+
+.cardSky {
+  background: var(--sky);
+}
+
+.cardTitle {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 7.8cqw; /* 30 / 385 */
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+.cardLead {
+  display: flex;
+  align-items: center;
+  gap: 1cqw;
+  font-family: var(--font-accent);
+  font-size: 5.2cqw; /* 20 / 385 */
+  line-height: 1.2;
+}
+
+.arrow {
+  width: 6.2cqw;
+  height: 6.2cqw;
+  flex-shrink: 0;
+}
+
+.cardText {
+  font-family: var(--font-accent);
+  font-size: 5.2cqw;
+  line-height: 1.2;
+}
+
+.polaroid {
+  position: absolute;
+  top: -9cqw;
+  right: -5cqw;
+  width: 24cqw;
+  rotate: 16deg;
+}
+
+.polaroidImg {
+  width: 100%;
+  border: 1.5cqw solid var(--white);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+.polaroidClip {
+  position: absolute;
+  top: -22%;
+  right: -18%;
+  width: 52%;
+  rotate: -46deg;
+}
+
+.film {
+  position: absolute;
+  top: -10cqw;
+  right: -2cqw;
+  width: 20cqw;
+  rotate: 3deg;
+  pointer-events: none;
+}
+
+/* ── Reduced-motion fallback ───────────────────────────────────────────── */
+.plainList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(4rem, 13vw, 7rem);
+  margin: 0;
+  padding: 0 0 clamp(5rem, 16vw, 9rem);
+}
+
+.plainList > li {
+  container-type: inline-size;
+  width: min(100%, 488px);
+  display: flex;
+  justify-content: center;
+}
+
+.plainList .note,
+.plainList .card {
+  width: min(100%, 385px);
+}

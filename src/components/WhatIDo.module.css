@@ -1,0 +1,151 @@
+/*
+ * Figma: a 2,653px section (≈2.9 viewports) holding an 874px text block with
+ * three images parked at 934 / 1568 / 2282 — i.e. the images travel THROUGH
+ * the pinned text, they don't follow it.
+ *
+ * Previously the rail sat after the sticky block in normal flow, so the first
+ * image only appeared a full viewport below the text and the section opened
+ * with a screen and a half of dead space. Pulling the rail up by exactly the
+ * sticky height overlaps the two, which is the whole point of the effect.
+ */
+.section {
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 1.5rem);
+  /* Narrow enough that the headings never reach the image gutters */
+  width: min(100% - var(--gutter) * 2, 40rem);
+  text-align: center;
+  pointer-events: auto;
+}
+
+.eyebrow {
+  font-size: var(--step-meta);
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* ── The three service headings ────────────────────────────────────────── */
+.headings {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.35rem, 1.2vw, 0.625rem);
+  margin: 0;
+  font-weight: 400;
+  width: 100%;
+}
+
+.heading {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--step-display);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.35) 50%, var(--ink) 50%);
+  background-size: 200% 100%;
+  background-position: 100% 0%;
+  background-repeat: no-repeat;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  will-change: opacity, transform, background-position;
+}
+
+.blurb {
+  max-width: 42ch;
+  font-size: var(--step-micro);
+  line-height: 1.35;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+}
+
+.progress {
+  display: flex;
+  gap: 6px;
+  margin-top: 0.5rem;
+}
+
+.tick {
+  width: 26px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.18);
+  transition: background var(--dur-mid) var(--ease-out);
+}
+
+.tickOn {
+  background: var(--ink);
+}
+
+/* ── Scrolling image rail ──────────────────────────────────────────────── */
+.rail {
+  position: relative;
+  z-index: 3;
+  /* Overlap the pinned text so images pass across it */
+  margin-top: -100svh;
+  display: flex;
+  flex-direction: column;
+  /* Figma's 934 / 634 / 714 gaps, expressed against the viewport */
+  padding-top: 95svh;
+  gap: 68svh;
+  padding-bottom: 35svh;
+}
+
+.slot {
+  display: flex;
+  width: min(100% - var(--gutter) * 2, var(--page-max));
+  margin-inline: auto;
+}
+
+.slotLeft {
+  justify-content: flex-start;
+}
+
+.slotRight {
+  justify-content: flex-end;
+}
+
+.frame {
+  margin: 0;
+  width: clamp(11.75rem, 46vw, 17rem);
+  aspect-ratio: 188.5 / 141.375; /* exact Figma ratio, node 3:1734 */
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  will-change: transform, opacity;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*
+ * Above 900px the headings are centred in a 40rem column, so the images get
+ * the outer gutters. Capping them at 18rem keeps a clear channel either side
+ * of the text even at 1280px: image 0–288, text 320–960, image 992–1280.
+ */
+@media (min-width: 900px) {
+  .frame {
+    width: min(18rem, 22vw);
+  }
+}
