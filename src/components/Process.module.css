@@ -323,11 +323,12 @@
 
 @media (max-width: 600px) {
   .section {
-    padding-top: 7rem;
+    padding-top: 8rem;
   }
 
   .stackItem {
-    top: 46%;
+    top: 50%;
   }
 }
+
 
