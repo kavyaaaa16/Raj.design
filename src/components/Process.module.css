@@ -326,8 +326,12 @@
     padding-top: 9rem;
   }
 
+  .header {
+    top: 1rem;
+  }
+
   .stackItem {
-    top: calc(50% + 1rem);
+    top: calc(50% + 2rem);
   }
 }
 
