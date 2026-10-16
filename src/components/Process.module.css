@@ -320,3 +320,14 @@
 .plainList .card {
   width: min(100%, 385px);
 }
+
+@media (max-width: 600px) {
+  .section {
+    padding-top: 7rem;
+  }
+
+  .stackItem {
+    top: 46%;
+  }
+}
+
