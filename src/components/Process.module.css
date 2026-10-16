@@ -323,11 +323,11 @@
 
 @media (max-width: 600px) {
   .section {
-    padding-top: 8rem;
+    padding-top: 9rem;
   }
 
   .stackItem {
-    top: 50%;
+    top: calc(50% + 1rem);
   }
 }
 
