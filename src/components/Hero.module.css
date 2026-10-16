@@ -205,3 +205,12 @@
     max-width: 16ch;
   }
 }
+
+@media (max-width: 600px) {
+  .stickerRight {
+    top: 10.25rem;
+  }
+}
+
+
+
