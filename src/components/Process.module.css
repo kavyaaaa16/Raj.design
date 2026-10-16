@@ -338,6 +338,10 @@
   .stackItem {
     top: calc(50% + 2rem);
   }
+
+  .badgeBottom {
+    bottom: 0;
+  }
 }
 
 
