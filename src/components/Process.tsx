@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from 'react';
+import { useRef, type ReactNode, type RefObject } from 'react';
 import {
   motion,
   useScroll,
@@ -69,33 +69,32 @@ function StackedStep({ progress, index, rotate, children }: StepCardProps) {
   );
 }
 
-function ProcessScene() {
-  const sceneRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sceneRef,
-    offset: ['start start', 'end end'],
-  });
+interface ProcessSceneProps {
+  sceneRef: RefObject<HTMLDivElement>;
+  progress: MotionValue<number>;
+}
 
+function ProcessScene({ sceneRef, progress }: ProcessSceneProps) {
   // Rises until its open mouth sits over the pile, then holds
   // 270% of its own height clears the bottom of the stage entirely; at 120% a
   // slice of the box sat visible at the foot of the screen from the first frame.
-  const boxY = useTransform(scrollYProgress, [BOX_IN[0], BOX_IN[1]], ['270%', '22%'], {
+  const boxY = useTransform(progress, [BOX_IN[0], BOX_IN[1]], ['270%', '22%'], {
     clamp: true,
   });
-  const boxOpacity = useTransform(scrollYProgress, [BOX_IN[0], BOX_IN[0] + 0.02], [0, 1], { clamp: true });
-  const copyOpacity = useTransform(scrollYProgress, [0.8, 0.9], [0, 1], { clamp: true });
-  const sceneOpacity = useTransform(scrollYProgress, [0, 0.001], [0, 1], { clamp: true });
+  const boxOpacity = useTransform(progress, [BOX_IN[0], BOX_IN[0] + 0.02], [0, 1], { clamp: true });
+  const copyOpacity = useTransform(progress, [0.8, 0.9], [0, 1], { clamp: true });
+  const sceneOpacity = useTransform(progress, [0, 0.001], [0, 1], { clamp: true });
 
   return (
     <div className={styles.scene} ref={sceneRef}>
       <motion.div className={styles.stage} style={{ opacity: sceneOpacity }}>
-        <StackedStep progress={scrollYProgress} index={0} rotate={-2}>
+        <StackedStep progress={progress} index={0} rotate={-2}>
           <StepOne />
         </StackedStep>
-        <StackedStep progress={scrollYProgress} index={1} rotate={-6}>
+        <StackedStep progress={progress} index={1} rotate={-6}>
           <StepTwo />
         </StackedStep>
-        <StackedStep progress={scrollYProgress} index={2} rotate={6}>
+        <StackedStep progress={progress} index={2} rotate={6}>
           <StepThree />
         </StackedStep>
 
@@ -202,10 +201,19 @@ function ProcessList() {
 
 export function Process() {
   const reduced = Boolean(useReducedMotion());
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sceneRef,
+    offset: ['start start', 'end end'],
+  });
+  const headerY = useTransform(scrollYProgress, [0.997, 1], ['0%', '-120%'], { clamp: true });
 
   return (
     <section className={styles.section} id="process" aria-labelledby="process-title">
-      <header className={styles.header}>
+      <motion.header
+        className={`${styles.header} ${reduced ? styles.headerStatic : ''}`}
+        style={reduced ? undefined : { y: headerY }}
+      >
         <motion.div
           className={styles.badgeTop}
           variants={popIn(-2)}
@@ -232,9 +240,9 @@ export function Process() {
 
         <Figure name="processEye" alt="" className={styles.eye} />
         <Figure name="processCamera" alt="" className={styles.camera} />
-      </header>
+      </motion.header>
 
-      {reduced ? <ProcessList /> : <ProcessScene />}
+      {reduced ? <ProcessList /> : <ProcessScene sceneRef={sceneRef} progress={scrollYProgress} />}
     </section>
   );
 }

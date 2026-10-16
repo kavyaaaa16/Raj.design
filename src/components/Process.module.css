@@ -25,6 +25,11 @@
   text-align: center;
 }
 
+.headerStatic {
+  position: relative;
+  top: auto;
+}
+
 .heading {
   font-family: var(--font-display);
   font-weight: 400;
