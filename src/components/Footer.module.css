@@ -1,7 +1,7 @@
 .footer {
   position: relative;
   padding: clamp(1rem, 3vw, 2rem) var(--gutter)
-    calc(clamp(7rem, 16vw, 9rem) + env(safe-area-inset-bottom, 0px));
+    calc(2rem + env(safe-area-inset-bottom, 0px));
 }
 
 .inner {
