@@ -216,7 +216,7 @@ export function Process() {
       >
         <motion.div
           className={styles.badgeTop}
-          variants={popIn(-2)}
+          variants={popIn(0)}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.7 }}
@@ -230,7 +230,7 @@ export function Process() {
 
         <motion.div
           className={styles.badgeBottom}
-          variants={popIn(2)}
+          variants={popIn(0)}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.7 }}
