@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, useMotionTemplate, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Figure } from './ui/Figure';
 import { Pill, type PillTone } from './ui/Pill';
 import { type AssetKey } from '../lib/assets';
@@ -111,7 +111,8 @@ export function Testimonials() {
     offset: ['start end', 'end start'],
   });
   const headingFilter = useTransform(scrollYProgress, [0, 1], ['blur(0px)', 'blur(3px)']);
-  const headingScale = useTransform(scrollYProgress, [0, 1], [1, 0.7]);
+  const headingScale = useTransform(scrollYProgress, [0, 1], [1, 0.55]);
+  const headingFontSize = useMotionTemplate`calc(var(--step-section) * ${headingScale})`;
   return (
     <section className={styles.section} id="testimonials" aria-labelledby="testimonials-title">
       <motion.header className={styles.header} style={{ filter: headingFilter }}>
@@ -125,7 +126,7 @@ export function Testimonials() {
           <Pill tone="sky">Aesthetics are nice</Pill>
         </motion.div>
 
-        <motion.h2 className={styles.heading} id="testimonials-title" style={{ scale: headingScale }}>
+        <motion.h2 className={styles.heading} id="testimonials-title" style={{ fontSize: headingFontSize }}>
           Okay, but will it work?
         </motion.h2>
 
