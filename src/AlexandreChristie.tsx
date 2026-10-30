@@ -49,8 +49,7 @@ export default function AlexandreChristie() {
       </div>
       <div className={styles.heroWindow}>
         <div className={styles.heroVisual}>
-          <Figure name="workAlexandreChristie" alt="Alexandre Christie Cosmic collection campaign concept" className={styles.heroImage} />
-          <div className={styles.heroOverlay}><span>Alexandre Christie · Cosmic Collection</span><strong>A COSMIC<br />CHANGE</strong><span>Visual direction · Digital experience · Campaign</span></div>
+          <img src={`${import.meta.env.BASE_URL}assets/case-study-cover.png`} alt="Cosmic collection campaign displayed in a gallery space" className={styles.heroImage} />
         </div>
         <Figure name="vinylRecord" alt="Vinyl record" className={styles.heroRecord} />
       </div>
