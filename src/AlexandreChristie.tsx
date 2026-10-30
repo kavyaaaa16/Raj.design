@@ -36,7 +36,7 @@ function Note({ number, title, children }: { number: string; title: string; chil
   return <article className={styles.note}><span className={styles.tape} /><p className={styles.noteTitle}>{number} — {title}</p><p className={styles.noteCopy}>{children}</p></article>;
 }
 
-function PhoneCarousel() {
+function PhoneCarousel({ ariaLabel = 'Campaign image carousel', imageSrc }: { ariaLabel?: string; imageSrc?: string }) {
   const trackRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -47,8 +47,10 @@ function PhoneCarousel() {
     }
   }, []);
 
-  return <div className={styles.phoneCarousel} ref={trackRef} role="region" aria-label="Campaign image carousel" tabIndex={0}>
-    {[1, 2, 3].map((number) => <div className={styles.phoneSlide} key={number} role="img" aria-label={`Campaign image ${number} placeholder`} />)}
+  return <div className={`${styles.phoneCarousel} ${imageSrc ? styles.imageCarousel : ''}`} ref={trackRef} role="region" aria-label={ariaLabel} tabIndex={0}>
+    {[1, 2, 3].map((number) => <div className={styles.phoneSlide} key={number} role="img" aria-label={`${ariaLabel} ${number}${imageSrc ? '' : ' placeholder'}`}>
+      {imageSrc && <img className={styles.phoneSlideImage} src={`${import.meta.env.BASE_URL}assets/${imageSrc}`} alt="" loading="lazy" />}
+    </div>)}
   </div>;
 }
 
@@ -134,7 +136,7 @@ export default function AlexandreChristie() {
           <h2 className={styles.pillLabel}>Instagram stories</h2>
           <InstagramStory />
           <h2 className={styles.pillLabel}>Carousels</h2>
-          <div className={styles.carouselMock}><div className={styles.socialHead}>◉ &nbsp; alexandrechristie_india &nbsp; <b>✓</b></div><div className={styles.carouselVisual}>SOMETHING IS<br />SHIFTING.</div><div className={styles.socialActions}>♡　◯　↻　➤　　▱</div></div>
+          <PhoneCarousel ariaLabel="Instagram carousel posts" imageSrc="case-study-instagram-carousel.png" />
         </Window>
         <div className={styles.results}><span>Results!</span><b>200k Views</b><b>51K Engagement</b><b>1.8× Higher Watch Time</b></div>
         <div className={styles.delivered}><span>I delivered</span><p>→ 20+ Static Posts<br />→ 4 Reels<br />→ 3 Hook Variations<br />→ Landing Page</p></div>
