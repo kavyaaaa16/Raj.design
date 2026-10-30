@@ -52,6 +52,26 @@ function PhoneCarousel() {
   </div>;
 }
 
+function InstagramStory() {
+  const [activeStory, setActiveStory] = useState(0);
+  const changeStory = (direction: number) => setActiveStory((current) => (current + direction + 3) % 3);
+
+  return <div className={styles.storyFrame}>
+    <img
+      src={`${import.meta.env.BASE_URL}assets/case-study-instagram-story.png`}
+      alt="Alexandre Christie Instagram story: A Cosmic Change Is Coming"
+      className={styles.storyImage}
+      onClick={(event) => {
+        const bounds = event.currentTarget.getBoundingClientRect();
+        changeStory(event.clientX < bounds.left + bounds.width / 2 ? -1 : 1);
+      }}
+    />
+    <div className={styles.storyProgress} role="group" aria-label="Choose Instagram story">
+      {[0, 1, 2].map((index) => <button key={index} type="button" aria-label={`Show story ${index + 1}`} aria-pressed={activeStory === index} onClick={() => setActiveStory(index)}><span className={activeStory === index ? styles.progressActive : ''} /></button>)}
+    </div>
+  </div>;
+}
+
 export default function AlexandreChristie() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const [titleWidth, setTitleWidth] = useState<number>();
@@ -112,7 +132,7 @@ export default function AlexandreChristie() {
         <Note number="03" title="Extending the Story to Instagram">I created visually engaging, product-focused social content that carried Cosmic’s premium visual identity across Instagram through cohesive compositions and storytelling.</Note>
         <Window className={styles.socialWindow}>
           <h2 className={styles.pillLabel}>Instagram stories</h2>
-          <div className={styles.story}><span>◉ &nbsp; alexandrechristie_india &nbsp; <b>✓</b></span><div className={styles.eclipse}>555</div><small>A Cosmic Change Is Coming</small></div>
+          <InstagramStory />
           <h2 className={styles.pillLabel}>Carousels</h2>
           <div className={styles.carouselMock}><div className={styles.socialHead}>◉ &nbsp; alexandrechristie_india &nbsp; <b>✓</b></div><div className={styles.carouselVisual}>SOMETHING IS<br />SHIFTING.</div><div className={styles.socialActions}>♡　◯　↻　➤　　▱</div></div>
         </Window>
