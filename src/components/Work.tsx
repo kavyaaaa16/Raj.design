@@ -54,7 +54,7 @@ const PROJECTS: Project[] = [
     clip: 'paperclipRedAlt',
     rotate: -7,
     clipRotate: -27.14,
-    href: '#',
+    href: `${import.meta.env.BASE_URL}#project=alexandre-christie`,
   },
   {
     title: 'HealthFit',

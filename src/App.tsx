@@ -1,4 +1,5 @@
 import { motion, useScroll, useSpring } from 'framer-motion';
+import AlexandreChristie from './AlexandreChristie';
 import { Dock } from './components/Dock';
 import { Hero } from './components/Hero';
 import { WhatIDo } from './components/WhatIDo';
@@ -10,6 +11,12 @@ import { useSmoothScroll } from './lib/useSmoothScroll';
 import styles from './App.module.css';
 
 export default function App() {
+  return window.location.hash === '#project=alexandre-christie'
+    ? <AlexandreChristie />
+    : <PortfolioHome />;
+}
+
+function PortfolioHome() {
   useSmoothScroll();
 
   const { scrollYProgress } = useScroll();
