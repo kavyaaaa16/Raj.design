@@ -6,12 +6,12 @@ import styles from './AlexandreChristie.module.css';
 
 const gallery = ['Campaign frame 01', 'Exploded watch detail', 'Campaign frame 02', 'Case study still', 'Rose gold case', 'Cosmic purple finish', 'Movement study', 'Dial detail', 'Cosmic Green watch'];
 const landingImages = [
-  { name: 'Image 1', left: 11, top: -0.17, width: 352.7088, height: 200.3482 },
-  { name: 'Image 2', left: 11, top: 224, width: 168, height: 365.2537 },
-  { name: 'Image 3', left: 195, top: 224, width: 168, height: 365.2537 },
-  { name: 'Image 4', left: 11, top: 613, width: 352.71, height: 272.1255 },
-  { name: 'Image 5', left: 11, top: 895, width: 172, height: 356 },
-  { name: 'Image 6', left: 195, top: 895.17, width: 168, height: 357.3134 },
+  { name: 'Cosmic landing page', src: 'case-study-hero.png', left: 11, top: -0.17, width: 352.7088, height: 200.3482 },
+  { name: 'Cosmic campaign portrait', src: 'case-study-campaign.png', left: 11, top: 224, width: 168, height: 365.2537 },
+  { name: 'Cosmic Green product page', src: 'case-study-product.png', left: 195, top: 224, width: 168, height: 365.2537 },
+  { name: 'Watch specifications and movement', src: 'case-study-specs.png', left: 11, top: 613, width: 352.71, height: 272.1255 },
+  { name: 'Video placeholder', src: '', left: 11, top: 895, width: 172, height: 356 },
+  { name: 'Orbit campaign', src: 'case-study-orbit.png', left: 195, top: 895.17, width: 168, height: 357.3134 },
 ];
 
 function BrowserDots() {
@@ -66,7 +66,9 @@ export default function AlexandreChristie() {
         <Note number="01" title="Designing the Digital Experience">I developed the visual direction and creative assets for the Cosmic product landing page, shaping how the collection would be introduced, experienced, and explored.</Note>
         <Window className={styles.landingWindow}>
           <div className={styles.landingGallery} aria-label="Cosmic landing page image layout">
-            {landingImages.map((image) => <div className={styles.landingPlaceholder} key={image.name} role="img" aria-label={`${image.name} placeholder`} style={{ left: image.left, top: image.top, width: image.width, height: image.height }}><span>{image.name}</span></div>)}
+            {landingImages.map((image) => <div className={image.src ? styles.landingImageFrame : styles.videoSlot} key={image.name} style={{ left: image.left, top: image.top, width: image.width, height: image.height }}>
+              {image.src && <img className={styles.landingImage} src={`${import.meta.env.BASE_URL}assets/${image.src}`} alt={image.name} loading="lazy" />}
+            </div>)}
           </div>
         </Window>
       </section>
