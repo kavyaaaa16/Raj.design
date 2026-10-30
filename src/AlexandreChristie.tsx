@@ -4,7 +4,17 @@ import { Dock } from './components/Dock';
 import { Figure } from './components/ui/Figure';
 import styles from './AlexandreChristie.module.css';
 
-const gallery = ['Campaign frame 01', 'Exploded watch detail', 'Campaign frame 02', 'Case study still', 'Rose gold case', 'Cosmic purple finish', 'Movement study', 'Dial detail', 'Cosmic Green watch'];
+const gallery = [
+  { name: 'Purple glow watch', src: 'case-study-gallery-glow.png' },
+  { name: 'Exploded watch', src: 'case-study-gallery-exploded.png' },
+  { name: 'Purple glow watch', src: 'case-study-gallery-glow.png' },
+  { name: 'Exploded watch', src: 'case-study-gallery-exploded.png' },
+  { name: 'Rose gold case', src: 'case-study-gallery-rose-case.png' },
+  { name: 'Purple case detail', src: 'case-study-gallery-purple-case.png' },
+  { name: 'Watch movement components', src: 'case-study-gallery-movement.png' },
+  { name: 'Cosmic Green dial detail', src: 'case-study-gallery-dial.png' },
+  { name: 'Cosmic Green watch', src: 'case-study-gallery-watch.png' },
+];
 const landingImages = [
   { name: 'Cosmic landing page', src: 'case-study-hero.png', left: 11, top: -0.17, width: 352.7088, height: 200.3482 },
   { name: 'Cosmic campaign portrait', src: 'case-study-campaign.png', left: 11, top: 224, width: 168, height: 365.2537 },
@@ -75,8 +85,9 @@ export default function AlexandreChristie() {
       <section className={styles.section}>
         <Note number="02" title="Crafting the Campaign Films">I created three campaign videos, exploring how motion, atmosphere, and visual storytelling could elevate the product beyond static imagery.</Note>
         <Window className={styles.campaignWindow}>
+          <img src={`${import.meta.env.BASE_URL}assets/case-study-portrait.png`} alt="Raj planning the campaign film" className={styles.campaignPortrait} />
           <p className={styles.campaignLead}>One of the most distinctive executions was a fully AI-generated film. Instead of relying on a simple text prompt, I first developed the visual frames in Photoshop, carefully establishing the composition, lighting, environment, and product placement. I then used those frames as the foundation for the visual direction, guiding the generation process toward the intended cinematic result.</p>
-          <div className={styles.gallery}>{gallery.map((item, index) => <div className={styles.galleryTile} key={item}><Figure name="workAlexandreChristie" alt={item} /><span>0{index + 1}</span></div>)}</div>
+          <div className={styles.gallery}>{gallery.map((item, index) => <div className={styles.galleryTile} key={`${item.src}-${index}`}><img src={`${import.meta.env.BASE_URL}assets/${item.src}`} alt={item.name} loading="lazy" /></div>)}</div>
           <div className={styles.videoStrip}><div /><div /><div /></div>
         </Window>
       </section>
