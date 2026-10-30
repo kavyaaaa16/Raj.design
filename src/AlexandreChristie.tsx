@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { Footer } from './components/Footer';
 import { Dock } from './components/Dock';
 import { Figure } from './components/ui/Figure';
@@ -15,13 +15,13 @@ const gallery = [
   { name: 'Cosmic Green dial detail', src: 'case-study-gallery-dial.png' },
   { name: 'Cosmic Green watch', src: 'case-study-gallery-watch.png' },
 ];
-const landingImages = [
+const landingImages: Array<{ name: string; src: string; videoSrc?: string; left: number; top: number; width: number; height: number }> = [
   { name: 'Cosmic landing page', src: 'case-study-hero.png', left: 11, top: -0.17, width: 352.7088, height: 200.3482 },
   { name: 'Cosmic campaign portrait', src: 'case-study-campaign.png', left: 11, top: 224, width: 168, height: 365.2537 },
-  { name: 'Cosmic Green product page', src: 'case-study-product.png', left: 195, top: 224, width: 168, height: 365.2537 },
+  { name: 'Cosmic Green product video', src: '', videoSrc: 'case-study-product-video.mov', left: 195, top: 224, width: 168, height: 365.2537 },
   { name: 'Watch specifications and movement', src: 'case-study-specs.png', left: 11, top: 613, width: 352.71, height: 272.1255 },
-  { name: 'Video placeholder', src: '', left: 11, top: 895, width: 172, height: 356 },
-  { name: 'Orbit campaign', src: 'case-study-orbit.png', left: 195, top: 895.17, width: 168, height: 357.3134 },
+  { name: 'Campaign video', src: '', videoSrc: 'case-study-video-fifth.mov', left: 11, top: 895, width: 168, height: 357.3134 },
+  { name: 'Orbit campaign', src: 'case-study-orbit.png', left: 191, top: 895, width: 168, height: 357.3134 },
 ];
 
 function BrowserDots() {
@@ -51,6 +51,45 @@ function PhoneCarousel({ ariaLabel = 'Campaign image carousel', imageSrc }: { ar
     {[1, 2, 3].map((number) => <div className={styles.phoneSlide} key={number} role="img" aria-label={`${ariaLabel} ${number}${imageSrc ? '' : ' placeholder'}`}>
       {imageSrc && <img className={styles.phoneSlideImage} src={`${import.meta.env.BASE_URL}assets/${imageSrc}`} alt="" loading="lazy" />}
     </div>)}
+  </div>;
+}
+
+function MobileVideo() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const controlsTimer = useRef<number | undefined>(undefined);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [controlsVisible, setControlsVisible] = useState(false);
+
+  useEffect(() => () => {
+    if (controlsTimer.current !== undefined) window.clearTimeout(controlsTimer.current);
+  }, []);
+
+  const revealControls = () => {
+    setControlsVisible(true);
+    if (controlsTimer.current !== undefined) window.clearTimeout(controlsTimer.current);
+    controlsTimer.current = window.setTimeout(() => setControlsVisible(false), 2200);
+  };
+
+  const togglePlayback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      void video.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  return <div className={styles.phoneScreen} onPointerDown={revealControls}>
+    <video ref={videoRef} className={styles.phoneScreenVideo} src={`${import.meta.env.BASE_URL}assets/case-study-mobile-screen.mp4`} autoPlay muted={isMuted} loop playsInline preload="metadata" onPlay={() => setIsPlaying(true)} onPause={() => setIsPlaying(false)} />
+    <button className={`${styles.videoPlayButton} ${controlsVisible ? styles.controlsVisible : ''}`} type="button" onClick={togglePlayback} aria-label={isPlaying ? 'Pause video' : 'Play video'} tabIndex={controlsVisible ? 0 : -1}>
+      <svg viewBox="0 0 24 24" aria-hidden="true">{isPlaying ? <><path d="M8 5v14M16 5v14" /></> : <path d="m8 5 11 7-11 7z" />}</svg>
+    </button>
+    <button className={`${styles.videoMuteButton} ${controlsVisible ? styles.controlsVisible : ''}`} type="button" onClick={() => setIsMuted((muted) => !muted)} aria-label={isMuted ? 'Unmute video' : 'Mute video'} tabIndex={controlsVisible ? 0 : -1}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6l-5 4H4z" />{isMuted ? <path d="m17 9 5 6m0-6-5 6" /> : <><path d="M16 9a5 5 0 0 1 0 6" /><path d="M18.5 6.5a9 9 0 0 1 0 11" /></>}</svg>
+    </button>
   </div>;
 }
 
@@ -109,12 +148,14 @@ export default function AlexandreChristie() {
 
     <main className={styles.content}>
       <section className={styles.section}>
-        <div className={styles.phoneScreen} role="img" aria-label="Mobile screen mockup placeholder" />
+        <MobileVideo />
         <Note number="01" title="Designing the Digital Experience">I developed the visual direction and creative assets for the Cosmic product landing page, shaping how the collection would be introduced, experienced, and explored.</Note>
         <Window className={styles.landingWindow}>
           <div className={styles.landingGallery} aria-label="Cosmic landing page image layout">
             {landingImages.map((image) => <div className={image.src ? styles.landingImageFrame : styles.videoSlot} key={image.name} style={{ left: image.left, top: image.top, width: image.width, height: image.height }}>
-              {image.src && <img className={styles.landingImage} src={`${import.meta.env.BASE_URL}assets/${image.src}`} alt={image.name} loading="lazy" />}
+              {image.videoSrc
+                ? <video className={styles.landingImage} src={`${import.meta.env.BASE_URL}assets/${image.videoSrc}`} aria-label={image.name} autoPlay muted loop playsInline preload="metadata" />
+                : image.src && <img className={styles.landingImage} src={`${import.meta.env.BASE_URL}assets/${image.src}`} alt={image.name} loading="lazy" />}
             </div>)}
           </div>
         </Window>

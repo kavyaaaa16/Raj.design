@@ -54,4 +54,14 @@
 .resultsContent span{font-size:1.8rem}
 .resultsContent b{max-width:100%;padding:.3rem .6rem;font-size:clamp(1.05rem,4vw,1.4rem);white-space:nowrap}
 .deliveredClip{position:absolute;z-index:2;top:-42px;right:-20px;width:140px;height:130px;object-fit:contain;transform:rotate(51deg);pointer-events:none}
+.videoSlot .landingImage{transform:scale(1.08);transform-origin:top center}
+.phoneScreen{position:relative;overflow:hidden;background:#050505}
+.phoneScreenVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:30px}
+.videoPlayButton,.videoMuteButton{position:absolute;z-index:2;display:grid;place-items:center;padding:0;border:1px solid rgba(255,255,255,.85);border-radius:50%;color:#fff;background:rgba(0,0,0,.58);cursor:pointer;backdrop-filter:blur(4px)}
+.videoPlayButton{top:50%;left:50%;width:58px;height:58px;transform:translate(-50%,-50%)}
+.videoMuteButton{right:14px;bottom:14px;width:42px;height:42px}
+.videoPlayButton svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.videoMuteButton svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.videoPlayButton,.videoMuteButton{opacity:0;pointer-events:none;transition:opacity .28s ease}
+.controlsVisible{opacity:1;pointer-events:auto}
 .page>footer{position:relative;left:50%;width:100vw;max-width:none;transform:translateX(-50%)}
