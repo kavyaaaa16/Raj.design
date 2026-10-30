@@ -138,11 +138,21 @@ export default function AlexandreChristie() {
           <h2 className={styles.pillLabel}>Carousels</h2>
           <PhoneCarousel ariaLabel="Instagram carousel posts" imageSrc="case-study-instagram-carousel.png" />
         </Window>
-        <div className={styles.results}><span>Results!</span><b>200k Views</b><b>51K Engagement</b><b>1.8× Higher Watch Time</b></div>
-        <div className={styles.delivered}><span>I delivered</span><p>→ 20+ Static Posts<br />→ 4 Reels<br />→ 3 Hook Variations<br />→ Landing Page</p></div>
+        <div className={styles.results}>
+          <img className={styles.resultsPaper} src={`${import.meta.env.BASE_URL}assets/case-study-results-paper.png`} alt="" aria-hidden="true" />
+          <div className={styles.resultsContent}><span>Results!</span><b>200k Views</b><b>51K Engagement</b><b>1.8× Higher Watch Time</b></div>
+        </div>
+        <div className={styles.delivered}><img className={styles.deliveredClip} src={`${import.meta.env.BASE_URL}assets/process-polaroid-clip.png`} alt="" aria-hidden="true" /><span>I delivered</span><p>→ 20+ Static Posts<br />→ 4 Reels<br />→ 3 Hook Variations<br />→ Landing Page</p></div>
       </section>
 
-      <a className={styles.nextProject} href={`${import.meta.env.BASE_URL}#work`}><span>Back to the collection</span><strong>Let’s work<br />together <i>↗</i></strong></a>
+      <a className={styles.nextCase} href={`${import.meta.env.BASE_URL}#work`} aria-label="View the Honigdachs project">
+        <Window className={styles.honigdachsWindow}>
+          <img className={styles.honigdachsClip} src={`${import.meta.env.BASE_URL}assets/paperclip-blue.svg`} alt="" aria-hidden="true" />
+          <img className={styles.honigdachsPhoto} src={`${import.meta.env.BASE_URL}assets/work-honigdachs.png`} alt="Honigdachs flower shop website in a field of flowers" loading="lazy" />
+          <div className={styles.honigdachsMeta}><strong>Honigdachs</strong><span>Website Design</span><span>Figma</span><span>2026</span></div>
+        </Window>
+      </a>
+
     </main>
     <Footer />
     <Dock />
