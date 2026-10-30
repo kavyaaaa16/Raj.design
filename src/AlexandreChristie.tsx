@@ -36,6 +36,22 @@ function Note({ number, title, children }: { number: string; title: string; chil
   return <article className={styles.note}><span className={styles.tape} /><p className={styles.noteTitle}>{number} — {title}</p><p className={styles.noteCopy}>{children}</p></article>;
 }
 
+function PhoneCarousel() {
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const track = trackRef.current;
+    const activeSlide = track?.children[1] as HTMLElement | undefined;
+    if (track && activeSlide) {
+      track.scrollLeft = activeSlide.offsetLeft - (track.clientWidth - activeSlide.offsetWidth) / 2;
+    }
+  }, []);
+
+  return <div className={styles.phoneCarousel} ref={trackRef} role="region" aria-label="Campaign image carousel" tabIndex={0}>
+    {[1, 2, 3].map((number) => <div className={styles.phoneSlide} key={number} role="img" aria-label={`Campaign image ${number} placeholder`} />)}
+  </div>;
+}
+
 export default function AlexandreChristie() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const [titleWidth, setTitleWidth] = useState<number>();
@@ -88,7 +104,7 @@ export default function AlexandreChristie() {
           <img src={`${import.meta.env.BASE_URL}assets/case-study-portrait.png`} alt="Raj planning the campaign film" className={styles.campaignPortrait} />
           <p className={styles.campaignLead}>One of the most distinctive executions was a fully AI-generated film. Instead of relying on a simple text prompt, I first developed the visual frames in Photoshop, carefully establishing the composition, lighting, environment, and product placement. I then used those frames as the foundation for the visual direction, guiding the generation process toward the intended cinematic result.</p>
           <div className={styles.gallery}>{gallery.map((item, index) => <div className={styles.galleryTile} key={`${item.src}-${index}`}><img src={`${import.meta.env.BASE_URL}assets/${item.src}`} alt={item.name} loading="lazy" /></div>)}</div>
-          <div className={styles.videoStrip}><div /><div /><div /></div>
+          <PhoneCarousel />
         </Window>
       </section>
 
