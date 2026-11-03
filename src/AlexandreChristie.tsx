@@ -36,7 +36,7 @@ function Note({ number, title, children }: { number: string; title: string; chil
   return <article className={styles.note}><span className={styles.tape} /><p className={styles.noteTitle}>{number} — {title}</p><p className={styles.noteCopy}>{children}</p></article>;
 }
 
-function PhoneCarousel({ ariaLabel = 'Campaign image carousel', imageSrc }: { ariaLabel?: string; imageSrc?: string }) {
+function PhoneCarousel({ ariaLabel = 'Campaign image carousel', imageSrc, videoSources }: { ariaLabel?: string; imageSrc?: string; videoSources?: string[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -48,8 +48,9 @@ function PhoneCarousel({ ariaLabel = 'Campaign image carousel', imageSrc }: { ar
   }, []);
 
   return <div className={`${styles.phoneCarousel} ${imageSrc ? styles.imageCarousel : ''}`} ref={trackRef} role="region" aria-label={ariaLabel} tabIndex={0}>
-    {[1, 2, 3].map((number) => <div className={styles.phoneSlide} key={number} role="img" aria-label={`${ariaLabel} ${number}${imageSrc ? '' : ' placeholder'}`}>
+    {[1, 2, 3].map((number) => <div className={styles.phoneSlide} key={number} role="img" aria-label={`${ariaLabel} ${number}${imageSrc || videoSources ? '' : ' placeholder'}`}>
       {imageSrc && <img className={styles.phoneSlideImage} src={`${import.meta.env.BASE_URL}assets/${imageSrc}`} alt="" loading="lazy" />}
+      {videoSources?.[number - 1] && <video className={styles.phoneSlideVideo} src={`${import.meta.env.BASE_URL}assets/${videoSources[number - 1]}`} aria-label={`${ariaLabel} ${number}`} autoPlay muted loop playsInline preload="metadata" />}
     </div>)}
   </div>;
 }
@@ -167,7 +168,7 @@ export default function AlexandreChristie() {
           <img src={`${import.meta.env.BASE_URL}assets/case-study-portrait.png`} alt="Raj planning the campaign film" className={styles.campaignPortrait} />
           <p className={styles.campaignLead}>One of the most distinctive executions was a fully AI-generated film. Instead of relying on a simple text prompt, I first developed the visual frames in Photoshop, carefully establishing the composition, lighting, environment, and product placement. I then used those frames as the foundation for the visual direction, guiding the generation process toward the intended cinematic result.</p>
           <div className={styles.gallery}>{gallery.map((item, index) => <div className={styles.galleryTile} key={`${item.src}-${index}`}><img src={`${import.meta.env.BASE_URL}assets/${item.src}`} alt={item.name} loading="lazy" /></div>)}</div>
-          <PhoneCarousel />
+          <PhoneCarousel ariaLabel="Campaign video carousel" videoSources={['case-study-carousel-unboxing.mp4', 'case-study-carousel-launch.mp4', 'case-study-carousel-main.mp4']} />
         </Window>
       </section>
 
