@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import AlexandreChristie from './AlexandreChristie';
 import { Dock } from './components/Dock';
@@ -11,7 +12,24 @@ import { useSmoothScroll } from './lib/useSmoothScroll';
 import styles from './App.module.css';
 
 export default function App() {
-  return window.location.hash === '#project=alexandre-christie'
+  const [hash, setHash] = useState(() => window.location.hash);
+
+  useEffect(() => {
+    const updateHash = () => setHash(window.location.hash);
+    window.addEventListener('hashchange', updateHash);
+    return () => window.removeEventListener('hashchange', updateHash);
+  }, []);
+
+  useEffect(() => {
+    if (hash === '#project=alexandre-christie' || !hash) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    const targetId = hash.slice(1);
+    requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView());
+  }, [hash]);
+
+  return hash === '#project=alexandre-christie'
     ? <AlexandreChristie />
     : <PortfolioHome />;
 }

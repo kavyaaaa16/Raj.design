@@ -83,7 +83,7 @@ export const MANIFEST = {
     alt: 'Honigdachs website design',
   },
   workAlexandreChristie: {
-    file: 'work-alexandre-christie.png',
+    file: 'case-study-cover.png',
     nodeId: '1:2172',
     figmaUrl: 'https://www.figma.com/api/mcp/asset/1ea8a23f-298b-4a49-925d-ea556e56b0bf.png',
     alt: 'Alexandre Christie visual concept',

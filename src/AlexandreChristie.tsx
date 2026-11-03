@@ -195,6 +195,8 @@ export default function AlexandreChristie() {
         </Window>
       </a>
 
+      <a className={styles.backHome} href={import.meta.env.BASE_URL}>← Back to the collection</a>
+
     </main>
     <Footer />
     <Dock />

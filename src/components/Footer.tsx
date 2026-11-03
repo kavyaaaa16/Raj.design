@@ -15,9 +15,9 @@ import styles from './Footer.module.css';
  */
 
 const LINKS = [
-  { label: 'Instagram', href: 'https://instagram.com/', tone: 'lilac' as const },
-  { label: 'Behance', href: 'https://behance.net/', tone: 'sky' as const },
-  { label: 'Email', href: 'mailto:hello@raj.designs', tone: 'periwinkle' as const },
+  { label: 'Behance', href: 'https://www.behance.net/rajchhatwani02', tone: 'lilac' as const },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/rajchhatwani/', tone: 'sky' as const },
+  { label: 'Email', href: 'mailto:chhatwaniraj01@gmail.com', tone: 'periwinkle' as const },
 ];
 
 function MagneticPanel({ children }: { children: React.ReactNode }) {
