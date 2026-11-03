@@ -67,4 +67,17 @@
 .phoneSlideVideo{display:block;width:100%;height:100%;object-fit:cover}
 .phoneCarousel{touch-action:pan-x pan-y}
 .backHome{display:block;width:fit-content;margin:0 auto 2rem;color:#222;font:600 1rem var(--font-accent);text-decoration:none}.backHome:hover,.backHome:focus-visible{text-decoration:underline;text-underline-offset:4px}
+.revealTarget{opacity:0;translate:0 32px;scale:.96;transition:opacity .85s ease var(--reveal-delay,0ms),translate .85s cubic-bezier(.2,.7,.2,1) var(--reveal-delay,0ms),scale .85s cubic-bezier(.2,.7,.2,1) var(--reveal-delay,0ms)}
+.revealVisible{opacity:1;translate:0 0;scale:1}
+.heroImage{animation:coverSettle 1.6s cubic-bezier(.2,.7,.2,1) both}
+.heroRecord{animation:recordSpin 20s linear infinite}
+.galleryTile{transition:filter .25s ease,transform .25s ease}
+.galleryTile:hover{transform:translateY(-5px) scale(1.03)}
+.galleryStagger .galleryTile{opacity:0;translate:0 28px;scale:.96;transition:opacity .55s ease,translate .55s cubic-bezier(.2,.7,.2,1),scale .55s cubic-bezier(.2,.7,.2,1)}
+.galleryStagger.galleryVisible .galleryTile{opacity:1;translate:0 0;scale:1}
+.galleryStagger .galleryTile:nth-child(1){transition-delay:0ms}.galleryStagger .galleryTile:nth-child(2){transition-delay:100ms}.galleryStagger .galleryTile:nth-child(3){transition-delay:200ms}.galleryStagger .galleryTile:nth-child(4){transition-delay:300ms}.galleryStagger .galleryTile:nth-child(5){transition-delay:400ms}.galleryStagger .galleryTile:nth-child(6){transition-delay:500ms}.galleryStagger .galleryTile:nth-child(7){transition-delay:600ms}.galleryStagger .galleryTile:nth-child(8){transition-delay:700ms}.galleryStagger .galleryTile:nth-child(9){transition-delay:800ms}
+.phoneSlide{transition:transform .3s ease}.phoneSlide:hover{transform:translateY(-4px) scale(1.01)}
+@keyframes coverSettle{from{opacity:.65;transform:scale(1.08)}to{opacity:1;transform:scale(1)}}
+@keyframes recordSpin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.heroImage,.heroRecord,.galleryTile,.phoneSlide{animation:none;transition:none}.revealTarget{opacity:1;translate:0 0;scale:1;transition:none}.galleryStagger .galleryTile{opacity:0;translate:0 0;scale:1;transition:opacity .35s ease}.galleryStagger.galleryVisible .galleryTile{opacity:1}}
 .page>footer{position:relative;left:50%;width:100vw;max-width:none;transform:translateX(-50%)}

@@ -128,6 +128,50 @@ export default function AlexandreChristie() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const selector = [
+      styles.heroVisual,
+      styles.intro,
+      styles.phoneScreen,
+      styles.note,
+      styles.landingWindow,
+      styles.campaignWindow,
+      styles.socialWindow,
+      styles.gallery,
+      styles.phoneSlide,
+      styles.results,
+      styles.delivered,
+      styles.nextCase,
+    ].map((className) => `.${className}`).join(',');
+    const targets = Array.from(document.querySelectorAll<HTMLElement>(selector));
+    const showAll = () => targets.forEach((target) => {
+      target.classList.add(styles.revealVisible);
+      if (target.classList.contains(styles.gallery)) target.classList.add(styles.galleryVisible);
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+      showAll();
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add(styles.revealVisible);
+        if (entry.target.classList.contains(styles.gallery)) entry.target.classList.add(styles.galleryVisible);
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -4% 0px' });
+
+    targets.forEach((target, index) => {
+      const delay = Math.min(index % 9, 8) * 55;
+      target.style.setProperty('--reveal-delay', `${delay}ms`);
+      target.classList.add(styles.revealTarget);
+      observer.observe(target);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   return <div className={styles.page}>
     <header className={styles.hero}>
       <div className={styles.topbar}>
@@ -167,7 +211,7 @@ export default function AlexandreChristie() {
         <Window className={styles.campaignWindow}>
           <img src={`${import.meta.env.BASE_URL}assets/case-study-portrait.png`} alt="Raj planning the campaign film" className={styles.campaignPortrait} />
           <p className={styles.campaignLead}>One of the most distinctive executions was a fully AI-generated film. Instead of relying on a simple text prompt, I first developed the visual frames in Photoshop, carefully establishing the composition, lighting, environment, and product placement. I then used those frames as the foundation for the visual direction, guiding the generation process toward the intended cinematic result.</p>
-          <div className={styles.gallery}>{gallery.map((item, index) => <div className={styles.galleryTile} key={`${item.src}-${index}`}><img src={`${import.meta.env.BASE_URL}assets/${item.src}`} alt={item.name} loading="lazy" /></div>)}</div>
+          <div className={`${styles.gallery} ${styles.galleryStagger}`}>{gallery.map((item, index) => <div className={styles.galleryTile} key={`${item.src}-${index}`}><img src={`${import.meta.env.BASE_URL}assets/${item.src}`} alt={item.name} loading="lazy" /></div>)}</div>
           <PhoneCarousel ariaLabel="Campaign video carousel" videoSources={['case-study-carousel-unboxing.mp4', 'case-study-carousel-launch.mp4', 'case-study-carousel-main.mp4']} />
         </Window>
       </section>
