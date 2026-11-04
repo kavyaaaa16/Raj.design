@@ -14,6 +14,10 @@ export const setLenis = (next: Lenis | null): void => {
   instance = next;
 };
 
+export function stopSmoothScroll(): void {
+  instance?.stop();
+}
+
 /**
  * Scroll to a section by id. Mirrors the one interaction recorded in the Figma
  * prototype: a dock icon click that scroll-animates to the work section

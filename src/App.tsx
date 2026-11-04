@@ -26,7 +26,7 @@ export default function App() {
 
   useLayoutEffect(() => {
     if (hash === '#project=alexandre-christie' || !hash) {
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       return;
     }
     const targetId = hash.slice(1);

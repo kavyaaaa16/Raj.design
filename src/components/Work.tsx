@@ -4,6 +4,7 @@ import { Figure } from './ui/Figure';
 import { Pill } from './ui/Pill';
 import { type AssetKey } from '../lib/assets';
 import { popIn, inViewLoose, EASE_OUT } from '../lib/motion';
+import { stopSmoothScroll } from '../lib/scroll';
 import styles from './Work.module.css';
 
 /**
@@ -133,6 +134,7 @@ function ProjectCard({ project, index, smallScreen, animated = true }: { project
         onClick={(event) => {
           if (!project.href.includes('#project=') || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
           event.preventDefault();
+          stopSmoothScroll();
           window.history.pushState(null, '', project.href);
           window.dispatchEvent(new PopStateEvent('popstate'));
         }}
