@@ -111,21 +111,32 @@ function useSmallScreen() {
   return smallScreen;
 }
 
-function ProjectCard({ project, index, smallScreen }: { project: Project; index: number; smallScreen: boolean }) {
+function ProjectCard({ project, index, smallScreen, animated = true }: { project: Project; index: number; smallScreen: boolean; animated?: boolean }) {
   const reduced = useReducedMotion();
+  const shouldAnimate = animated && !reduced;
 
   return (
     <motion.article
       className={styles.card}
-      variants={reduced ? undefined : projectEntrance(project.rotate, index, smallScreen ? 24 : 80)}
-      initial={reduced ? undefined : 'hidden'}
-      whileInView={reduced ? undefined : 'visible'}
-      viewport={inViewLoose}
-      style={reduced ? { rotate: project.rotate } : undefined}
-      whileHover={reduced ? undefined : { rotate: 0, scale: 1.03, y: -8 }}
-      transition={{ duration: 0.45, ease: EASE_OUT }}
+      variants={shouldAnimate ? projectEntrance(project.rotate, index, smallScreen ? 24 : 80) : undefined}
+      initial={shouldAnimate ? 'hidden' : undefined}
+      whileInView={shouldAnimate ? 'visible' : undefined}
+      viewport={shouldAnimate ? inViewLoose : undefined}
+      style={shouldAnimate ? undefined : { rotate: project.rotate }}
+      whileHover={shouldAnimate ? { rotate: 0, scale: 1.03, y: -8 } : undefined}
+      transition={shouldAnimate ? { duration: 0.45, ease: EASE_OUT } : undefined}
     >
-      <a className={styles.link} href={project.href} aria-label={`${project.title} — ${project.tags.join(', ')}`}>
+      <a
+        className={styles.link}
+        href={project.href}
+        aria-label={`${project.title} — ${project.tags.join(', ')}`}
+        onClick={(event) => {
+          if (!project.href.includes('#project=') || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          window.history.pushState(null, '', project.href);
+          window.dispatchEvent(new PopStateEvent('popstate'));
+        }}
+      >
         <div className={styles.chrome} aria-hidden="true">
           <span className={`${styles.light} ${styles.red}`} />
           <span className={`${styles.light} ${styles.amber}`} />
@@ -154,6 +165,13 @@ function ProjectCard({ project, index, smallScreen }: { project: Project; index:
       />
     </motion.article>
   );
+}
+
+export function HonigdachsProjectCard() {
+  const smallScreen = useSmallScreen();
+  const project = PROJECTS.find((item) => item.title === 'Honigdachs');
+  if (!project) return null;
+  return <ProjectCard project={{ ...project, href: `${import.meta.env.BASE_URL}#work` }} index={1} smallScreen={smallScreen} animated={false} />;
 }
 
 export function Work() {

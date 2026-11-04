@@ -1,7 +1,8 @@
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { Footer } from './components/Footer';
 import { Dock } from './components/Dock';
 import { Figure } from './components/ui/Figure';
+import { HonigdachsProjectCard } from './components/Work';
 import styles from './AlexandreChristie.module.css';
 
 const gallery = [
@@ -36,8 +37,9 @@ function Note({ number, title, children }: { number: string; title: string; chil
   return <article className={styles.note}><span className={styles.tape} /><p className={styles.noteTitle}>{number} — {title}</p><p className={styles.noteCopy}>{children}</p></article>;
 }
 
-function PhoneCarousel({ ariaLabel = 'Campaign image carousel', imageSrc, videoSources }: { ariaLabel?: string; imageSrc?: string; videoSources?: string[] }) {
+function PhoneCarousel({ ariaLabel = 'Campaign image carousel', imageSrc, imageSources, videoSources }: { ariaLabel?: string; imageSrc?: string; imageSources?: string[]; videoSources?: string[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const isImageCarousel = Boolean(imageSrc || imageSources);
 
   useLayoutEffect(() => {
     const track = trackRef.current;
@@ -47,11 +49,14 @@ function PhoneCarousel({ ariaLabel = 'Campaign image carousel', imageSrc, videoS
     }
   }, []);
 
-  return <div className={`${styles.phoneCarousel} ${imageSrc ? styles.imageCarousel : ''}`} ref={trackRef} role="region" aria-label={ariaLabel} tabIndex={0}>
-    {[1, 2, 3].map((number) => <div className={styles.phoneSlide} key={number} role="img" aria-label={`${ariaLabel} ${number}${imageSrc || videoSources ? '' : ' placeholder'}`}>
-      {imageSrc && <img className={styles.phoneSlideImage} src={`${import.meta.env.BASE_URL}assets/${imageSrc}`} alt="" loading="lazy" />}
-      {videoSources?.[number - 1] && <video className={styles.phoneSlideVideo} src={`${import.meta.env.BASE_URL}assets/${videoSources[number - 1]}`} aria-label={`${ariaLabel} ${number}`} autoPlay muted loop playsInline preload="metadata" />}
-    </div>)}
+  return <div className={`${styles.phoneCarousel} ${isImageCarousel ? styles.imageCarousel : ''}`} ref={trackRef} role="region" aria-label={ariaLabel} tabIndex={0}>
+    {[1, 2, 3].map((number) => {
+      const slideImage = imageSources?.[number - 1] ?? imageSrc;
+      return <div className={styles.phoneSlide} key={number} role="img" aria-label={`${ariaLabel} ${number}${slideImage || videoSources ? '' : ' placeholder'}`}>
+        {slideImage && <img className={styles.phoneSlideImage} src={`${import.meta.env.BASE_URL}assets/${slideImage}`} alt="" loading="lazy" />}
+        {videoSources?.[number - 1] && <video className={styles.phoneSlideVideo} src={`${import.meta.env.BASE_URL}assets/${videoSources[number - 1]}`} aria-label={`${ariaLabel} ${number}`} autoPlay muted loop playsInline preload="metadata" />}
+      </div>;
+    })}
   </div>;
 }
 
@@ -95,8 +100,24 @@ function MobileVideo() {
 }
 
 function InstagramStory() {
+  const storyDuration = 5000;
   const [activeStory, setActiveStory] = useState(0);
-  const changeStory = (direction: number) => setActiveStory((current) => (current + direction + 3) % 3);
+  const [storyRevision, setStoryRevision] = useState(0);
+  const showStory = (index: number) => {
+    setActiveStory((index + 3) % 3);
+    setStoryRevision((revision) => revision + 1);
+  };
+  const changeStory = (direction: number) => {
+    setActiveStory((current) => (current + direction + 3) % 3);
+    setStoryRevision((revision) => revision + 1);
+  };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setActiveStory((current) => (current + 1) % 3);
+    }, storyDuration);
+    return () => window.clearTimeout(timer);
+  }, [activeStory, storyRevision]);
 
   return <div className={styles.storyFrame}>
     <img
@@ -108,8 +129,8 @@ function InstagramStory() {
         changeStory(event.clientX < bounds.left + bounds.width / 2 ? -1 : 1);
       }}
     />
-    <div className={styles.storyProgress} role="group" aria-label="Choose Instagram story">
-      {[0, 1, 2].map((index) => <button key={index} type="button" aria-label={`Show story ${index + 1}`} aria-pressed={activeStory === index} onClick={() => setActiveStory(index)}><span className={activeStory === index ? styles.progressActive : ''} /></button>)}
+    <div className={styles.storyProgress} style={{ '--story-duration': `${storyDuration}ms` } as CSSProperties} role="group" aria-label="Choose Instagram story">
+      {[0, 1, 2].map((index) => <button key={index} type="button" aria-label={`Show story ${index + 1}`} aria-pressed={activeStory === index} onClick={() => showStory(index)}><span key={`${index}-${activeStory}-${storyRevision}`} className={index < activeStory ? styles.progressComplete : index === activeStory ? styles.progressActive : ''} /></button>)}
     </div>
   </div>;
 }
@@ -125,50 +146,6 @@ export default function AlexandreChristie() {
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(title);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const selector = [
-      styles.heroVisual,
-      styles.intro,
-      styles.phoneScreen,
-      styles.note,
-      styles.landingWindow,
-      styles.campaignWindow,
-      styles.socialWindow,
-      styles.gallery,
-      styles.phoneSlide,
-      styles.results,
-      styles.delivered,
-      styles.nextCase,
-    ].map((className) => `.${className}`).join(',');
-    const targets = Array.from(document.querySelectorAll<HTMLElement>(selector));
-    const showAll = () => targets.forEach((target) => {
-      target.classList.add(styles.revealVisible);
-      if (target.classList.contains(styles.gallery)) target.classList.add(styles.galleryVisible);
-    });
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
-      showAll();
-      return;
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add(styles.revealVisible);
-        if (entry.target.classList.contains(styles.gallery)) entry.target.classList.add(styles.galleryVisible);
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -4% 0px' });
-
-    targets.forEach((target, index) => {
-      const delay = Math.min(index % 9, 8) * 55;
-      target.style.setProperty('--reveal-delay', `${delay}ms`);
-      target.classList.add(styles.revealTarget);
-      observer.observe(target);
-    });
     return () => observer.disconnect();
   }, []);
 
@@ -211,7 +188,7 @@ export default function AlexandreChristie() {
         <Window className={styles.campaignWindow}>
           <img src={`${import.meta.env.BASE_URL}assets/case-study-portrait.png`} alt="Raj planning the campaign film" className={styles.campaignPortrait} />
           <p className={styles.campaignLead}>One of the most distinctive executions was a fully AI-generated film. Instead of relying on a simple text prompt, I first developed the visual frames in Photoshop, carefully establishing the composition, lighting, environment, and product placement. I then used those frames as the foundation for the visual direction, guiding the generation process toward the intended cinematic result.</p>
-          <div className={`${styles.gallery} ${styles.galleryStagger}`}>{gallery.map((item, index) => <div className={styles.galleryTile} key={`${item.src}-${index}`}><img src={`${import.meta.env.BASE_URL}assets/${item.src}`} alt={item.name} loading="lazy" /></div>)}</div>
+          <div className={styles.gallery}>{gallery.map((item, index) => <div className={styles.galleryTile} key={`${item.src}-${index}`}><img src={`${import.meta.env.BASE_URL}assets/${item.src}`} alt={item.name} loading="lazy" /></div>)}</div>
           <PhoneCarousel ariaLabel="Campaign video carousel" videoSources={['case-study-carousel-unboxing.mp4', 'case-study-carousel-launch.mp4', 'case-study-carousel-main.mp4']} />
         </Window>
       </section>
@@ -222,7 +199,7 @@ export default function AlexandreChristie() {
           <h2 className={styles.pillLabel}>Instagram stories</h2>
           <InstagramStory />
           <h2 className={styles.pillLabel}>Carousels</h2>
-          <PhoneCarousel ariaLabel="Instagram carousel posts" imageSrc="case-study-instagram-carousel.png" />
+          <PhoneCarousel ariaLabel="Instagram carousel posts" imageSources={['case-study-instagram-carousel-left.png', 'case-study-instagram-carousel.png', 'case-study-instagram-carousel-right.png']} />
         </Window>
         <div className={styles.results}>
           <img className={styles.resultsPaper} src={`${import.meta.env.BASE_URL}assets/case-study-results-paper.png`} alt="" aria-hidden="true" />
@@ -231,15 +208,7 @@ export default function AlexandreChristie() {
         <div className={styles.delivered}><img className={styles.deliveredClip} src={`${import.meta.env.BASE_URL}assets/process-polaroid-clip.png`} alt="" aria-hidden="true" /><span>I delivered</span><p>→ 20+ Static Posts<br />→ 4 Reels<br />→ 3 Hook Variations<br />→ Landing Page</p></div>
       </section>
 
-      <a className={styles.nextCase} href={`${import.meta.env.BASE_URL}#work`} aria-label="View the Honigdachs project">
-        <Window className={styles.honigdachsWindow}>
-          <img className={styles.honigdachsClip} src={`${import.meta.env.BASE_URL}assets/paperclip-blue.svg`} alt="" aria-hidden="true" />
-          <img className={styles.honigdachsPhoto} src={`${import.meta.env.BASE_URL}assets/work-honigdachs.png`} alt="Honigdachs flower shop website in a field of flowers" loading="lazy" />
-          <div className={styles.honigdachsMeta}><strong>Honigdachs</strong><span>Website Design</span><span>Figma</span><span>2026</span></div>
-        </Window>
-      </a>
-
-      <a className={styles.backHome} href={import.meta.env.BASE_URL}>← Back to the collection</a>
+      <div className={styles.nextCase}><HonigdachsProjectCard /></div>
 
     </main>
     <Footer />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import AlexandreChristie from './AlexandreChristie';
 import { Dock } from './components/Dock';
@@ -17,10 +17,14 @@ export default function App() {
   useEffect(() => {
     const updateHash = () => setHash(window.location.hash);
     window.addEventListener('hashchange', updateHash);
-    return () => window.removeEventListener('hashchange', updateHash);
+    window.addEventListener('popstate', updateHash);
+    return () => {
+      window.removeEventListener('hashchange', updateHash);
+      window.removeEventListener('popstate', updateHash);
+    };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (hash === '#project=alexandre-christie' || !hash) {
       window.scrollTo(0, 0);
       return;
