@@ -106,6 +106,24 @@ export const MANIFEST = {
     figmaUrl: null,
     alt: 'ZYVO brand identity on dark woven fabric',
   },
+  workCgfCard: {
+    file: 'work-cgf-card.png',
+    nodeId: '',
+    figmaUrl: null,
+    alt: 'CGF app project card',
+  },
+  workTechExpoCard: {
+    file: 'work-techexpo-card.png',
+    nodeId: '',
+    figmaUrl: null,
+    alt: 'TechExpo Gujarat website project card',
+  },
+  workUnboxingCommunityCard: {
+    file: 'work-unboxing-community-card.png',
+    nodeId: '',
+    figmaUrl: null,
+    alt: 'Unboxing Community app project card',
+  },
   paperclipBlue: {
     file: 'paperclip-blue.svg',
     nodeId: '1:2094',
