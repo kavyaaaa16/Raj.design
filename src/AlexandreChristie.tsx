@@ -71,6 +71,18 @@ function MobileVideo() {
     if (controlsTimer.current !== undefined) window.clearTimeout(controlsTimer.current);
   }, []);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || entry.intersectionRatio < 0.25) video.pause();
+    }, { threshold: [0, 0.25] });
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
   const revealControls = () => {
     setControlsVisible(true);
     if (controlsTimer.current !== undefined) window.clearTimeout(controlsTimer.current);
@@ -100,29 +112,34 @@ function MobileVideo() {
 }
 
 function InstagramStory() {
+  const stories = [
+    { src: 'case-study-instagram-story.png', description: 'A Cosmic Change Is Coming' },
+    { src: 'case-study-instagram-story-2.png', description: 'Cosmic launch story' },
+    { src: 'case-study-instagram-story-3.png', description: 'Cosmic coming soon story' },
+  ];
   const storyDuration = 5000;
   const [activeStory, setActiveStory] = useState(0);
   const [storyRevision, setStoryRevision] = useState(0);
   const showStory = (index: number) => {
-    setActiveStory((index + 3) % 3);
+    setActiveStory((index + stories.length) % stories.length);
     setStoryRevision((revision) => revision + 1);
   };
   const changeStory = (direction: number) => {
-    setActiveStory((current) => (current + direction + 3) % 3);
+    setActiveStory((current) => (current + direction + stories.length) % stories.length);
     setStoryRevision((revision) => revision + 1);
   };
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      setActiveStory((current) => (current + 1) % 3);
+      setActiveStory((current) => (current + 1) % stories.length);
     }, storyDuration);
     return () => window.clearTimeout(timer);
   }, [activeStory, storyRevision]);
 
   return <div className={styles.storyFrame}>
     <img
-      src={`${import.meta.env.BASE_URL}assets/case-study-instagram-story.png`}
-      alt="Alexandre Christie Instagram story: A Cosmic Change Is Coming"
+      src={`${import.meta.env.BASE_URL}assets/${stories[activeStory].src}`}
+      alt={`Alexandre Christie Instagram story: ${stories[activeStory].description}`}
       className={styles.storyImage}
       onClick={(event) => {
         const bounds = event.currentTarget.getBoundingClientRect();
@@ -130,7 +147,7 @@ function InstagramStory() {
       }}
     />
     <div className={styles.storyProgress} style={{ '--story-duration': `${storyDuration}ms` } as CSSProperties} role="group" aria-label="Choose Instagram story">
-      {[0, 1, 2].map((index) => <button key={index} type="button" aria-label={`Show story ${index + 1}`} aria-pressed={activeStory === index} onClick={() => showStory(index)}><span key={`${index}-${activeStory}-${storyRevision}`} className={index < activeStory ? styles.progressComplete : index === activeStory ? styles.progressActive : ''} /></button>)}
+      {stories.map((_, index) => <button key={index} type="button" aria-label={`Show story ${index + 1}`} aria-pressed={activeStory === index} onClick={() => showStory(index)}><span key={`${index}-${activeStory}-${storyRevision}`} className={index < activeStory ? styles.progressComplete : index === activeStory ? styles.progressActive : ''} /></button>)}
     </div>
   </div>;
 }
