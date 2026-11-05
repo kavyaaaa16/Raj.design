@@ -58,6 +58,15 @@ const PROJECTS: Project[] = [
     href: `${import.meta.env.BASE_URL}#project=alexandre-christie`,
   },
   {
+    title: 'ZYVO',
+    tags: ['Brand Identity', 'Packaging', '2026'],
+    image: 'workZyvo',
+    clip: 'paperclipRed',
+    rotate: 3.12,
+    clipRotate: -20,
+    href: `${import.meta.env.BASE_URL}#project=zyvo`,
+  },
+  {
     title: 'HealthFit',
     tags: ['Branding & App', 'Figma', '2026'],
     image: 'workHealthFit',

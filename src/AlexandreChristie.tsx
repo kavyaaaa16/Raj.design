@@ -3,6 +3,7 @@ import { Footer } from './components/Footer';
 import { Dock } from './components/Dock';
 import { Figure } from './components/ui/Figure';
 import { HonigdachsProjectCard } from './components/Work';
+import { RiseText, TypewriterText } from './components/ScrollText';
 import styles from './AlexandreChristie.module.css';
 
 const gallery = [
@@ -34,7 +35,7 @@ function Window({ children, className = '' }: { children: ReactNode; className?:
 }
 
 function Note({ number, title, children }: { number: string; title: string; children: ReactNode }) {
-  return <article className={styles.note}><span className={styles.tape} /><p className={styles.noteTitle}>{number} — {title}</p><p className={styles.noteCopy}>{children}</p></article>;
+  return <article className={styles.note}><span className={styles.tape} /><TypewriterText as="p" className={styles.noteTitle} speed={0.008}>{`${number} — ${title}`}</TypewriterText><TypewriterText as="p" className={styles.noteCopy} speed={0.008}>{String(children)}</TypewriterText></article>;
 }
 
 function PhoneCarousel({ ariaLabel = 'Campaign image carousel', imageSrc, imageSources, videoSources }: { ariaLabel?: string; imageSrc?: string; imageSources?: string[]; videoSources?: string[] }) {
@@ -181,7 +182,7 @@ export default function AlexandreChristie() {
       </div>
       <div className={styles.intro}>
         <h1 ref={titleRef}>Alexandre Christie</h1>
-        <p style={titleWidth ? { width: `${titleWidth}px` } : undefined}>This case study showcases my end-to-end creative work for Alexandre Christie’s Cosmic collection, spanning visual direction, landing page design, 10+ lifestyle images, three campaign videos—including one fully AI-generated film—and three Instagram carousels, all crafted to create a cohesive luxury brand experience.</p>
+        <RiseText style={titleWidth ? { width: `${titleWidth}px` } : undefined}>This case study showcases my end-to-end creative work for Alexandre Christie’s Cosmic collection, spanning visual direction, landing page design, 10+ lifestyle images, three campaign videos—including one fully AI-generated film—and three Instagram carousels, all crafted to create a cohesive luxury brand experience.</RiseText>
       </div>
     </header>
 
@@ -204,7 +205,7 @@ export default function AlexandreChristie() {
         <Note number="02" title="Crafting the Campaign Films">I created three campaign videos, exploring how motion, atmosphere, and visual storytelling could elevate the product beyond static imagery.</Note>
         <Window className={styles.campaignWindow}>
           <img src={`${import.meta.env.BASE_URL}assets/case-study-portrait.png`} alt="Raj planning the campaign film" className={styles.campaignPortrait} />
-          <p className={styles.campaignLead}>One of the most distinctive executions was a fully AI-generated film. Instead of relying on a simple text prompt, I first developed the visual frames in Photoshop, carefully establishing the composition, lighting, environment, and product placement. I then used those frames as the foundation for the visual direction, guiding the generation process toward the intended cinematic result.</p>
+          <TypewriterText as="p" className={styles.campaignLead} speed={0.006}>One of the most distinctive executions was a fully AI-generated film. Instead of relying on a simple text prompt, I first developed the visual frames in Photoshop, carefully establishing the composition, lighting, environment, and product placement. I then used those frames as the foundation for the visual direction, guiding the generation process toward the intended cinematic result.</TypewriterText>
           <div className={styles.gallery}>{gallery.map((item, index) => <div className={styles.galleryTile} key={`${item.src}-${index}`}><img src={`${import.meta.env.BASE_URL}assets/${item.src}`} alt={item.name} loading="lazy" /></div>)}</div>
           <PhoneCarousel ariaLabel="Campaign video carousel" videoSources={['case-study-carousel-unboxing.mp4', 'case-study-carousel-launch.mp4', 'case-study-carousel-main.mp4']} />
         </Window>
@@ -213,9 +214,9 @@ export default function AlexandreChristie() {
       <section className={styles.section}>
         <Note number="03" title="Extending the Story to Instagram">I created visually engaging, product-focused social content that carried Cosmic’s premium visual identity across Instagram through cohesive compositions and storytelling.</Note>
         <Window className={styles.socialWindow}>
-          <h2 className={styles.pillLabel}>Instagram stories</h2>
+          <TypewriterText as="h2" className={styles.pillLabel}>Instagram stories</TypewriterText>
           <InstagramStory />
-          <h2 className={styles.pillLabel}>Carousels</h2>
+          <TypewriterText as="h2" className={styles.pillLabel}>Carousels</TypewriterText>
           <PhoneCarousel ariaLabel="Instagram carousel posts" imageSources={['case-study-instagram-carousel-left.png', 'case-study-instagram-carousel.png', 'case-study-instagram-carousel-right.png']} />
         </Window>
         <div className={styles.results}>

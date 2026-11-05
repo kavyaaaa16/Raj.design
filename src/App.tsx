@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import AlexandreChristie from './AlexandreChristie';
+import Zyvo from './Zyvo';
 import { Dock } from './components/Dock';
 import { Hero } from './components/Hero';
 import { WhatIDo } from './components/WhatIDo';
@@ -25,7 +26,7 @@ export default function App() {
   }, []);
 
   useLayoutEffect(() => {
-    if (hash === '#project=alexandre-christie' || !hash) {
+    if (hash === '#project=alexandre-christie' || hash === '#project=zyvo' || !hash) {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       return;
     }
@@ -35,6 +36,8 @@ export default function App() {
 
   return hash === '#project=alexandre-christie'
     ? <AlexandreChristie />
+    : hash === '#project=zyvo'
+      ? <Zyvo />
     : <PortfolioHome />;
 }
 

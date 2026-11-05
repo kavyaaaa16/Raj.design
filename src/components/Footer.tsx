@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
 import { Figure } from './ui/Figure';
 import { Pill } from './ui/Pill';
@@ -20,7 +20,7 @@ const LINKS = [
   { label: 'Email', href: 'mailto:chhatwaniraj01@gmail.com', tone: 'periwinkle' as const },
 ];
 
-function MagneticPanel({ children }: { children: React.ReactNode }) {
+function MagneticPanel({ children, animationsReady }: { children: React.ReactNode; animationsReady: boolean }) {
   const reduced = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -49,8 +49,8 @@ function MagneticPanel({ children }: { children: React.ReactNode }) {
       style={reduced ? undefined : { x: sx, y: sy }}
       onPointerMove={onMove}
       onPointerLeave={reset}
-      initial={{ opacity: 0, y: 36 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={animationsReady ? { opacity: 0, y: 36 } : undefined}
+      whileInView={animationsReady ? { opacity: 1, y: 0 } : undefined}
       viewport={inViewLoose}
       transition={{ duration: 0.7, ease: EASE_OUT }}
     >
@@ -61,12 +61,41 @@ function MagneticPanel({ children }: { children: React.ReactNode }) {
 
 export function Footer() {
   const reduced = useReducedMotion();
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const enableFooterAnimations = () => {
+      if (window.scrollY > 0) setHasScrolled(true);
+    };
+    window.addEventListener('scroll', enableFooterAnimations, { passive: true });
+    return () => window.removeEventListener('scroll', enableFooterAnimations);
+  }, []);
+
+  const animationsReady = hasScrolled && !reduced;
 
   return (
     <footer className={styles.footer} id="contact">
       <div className={styles.inner}>
-        <MagneticPanel>
-          <h2 className={styles.heading}>Let&rsquo;s work together</h2>
+        <MagneticPanel animationsReady={animationsReady}>
+          <motion.h2
+            className={styles.heading}
+            variants={stagger(0.035)}
+            initial={animationsReady ? 'hidden' : undefined}
+            whileInView={animationsReady ? 'visible' : undefined}
+            viewport={{ once: true, amount: 0.45 }}
+            aria-label="Let’s work together"
+          >
+            {"Let’s work together".split('').map((letter, index) => (
+              <motion.span
+                key={`${letter}-${index}`}
+                style={{ display: 'inline', font: 'inherit', letterSpacing: 'inherit', lineHeight: 'inherit' }}
+                variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
+                aria-hidden="true"
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </motion.h2>
           <Eyes />
           <Figure name="footerRecordButton" alt="" className={styles.record} />
         </MagneticPanel>
@@ -77,8 +106,8 @@ export function Footer() {
             <motion.p
               className={styles.sayHi}
               variants={stagger(0.14)}
-              initial={reduced ? undefined : 'hidden'}
-              whileInView={reduced ? undefined : 'visible'}
+              initial={animationsReady ? 'hidden' : undefined}
+              whileInView={animationsReady ? 'visible' : undefined}
               viewport={{ once: true, amount: 0.5 }}
               aria-label="SAY HI!"
             >

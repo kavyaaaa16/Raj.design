@@ -100,6 +100,12 @@ export const MANIFEST = {
     figmaUrl: 'https://www.figma.com/api/mcp/asset/b1a29ab1-98fd-4ebb-bd51-3786f1649ec7.png', // hit the Figma export rate limit — re-export node 8:4091
     alt: 'Miro brand identity',
   },
+  workZyvo: {
+    file: 'work-zyvo.png',
+    nodeId: '',
+    figmaUrl: null,
+    alt: 'ZYVO brand identity on dark woven fabric',
+  },
   paperclipBlue: {
     file: 'paperclip-blue.svg',
     nodeId: '1:2094',
