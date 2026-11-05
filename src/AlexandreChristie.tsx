@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type 
 import { Footer } from './components/Footer';
 import { Dock } from './components/Dock';
 import { Figure } from './components/ui/Figure';
-import { HonigdachsProjectCard } from './components/Work';
+import { ZyvoProjectCard } from './components/Work';
 import { RiseText, TypewriterText } from './components/ScrollText';
 import styles from './AlexandreChristie.module.css';
 
@@ -226,7 +226,7 @@ export default function AlexandreChristie() {
         <div className={styles.delivered}><img className={styles.deliveredClip} src={`${import.meta.env.BASE_URL}assets/process-polaroid-clip.png`} alt="" aria-hidden="true" /><span>I delivered</span><p>→ 20+ Static Posts<br />→ 4 Reels<br />→ 3 Hook Variations<br />→ Landing Page</p></div>
       </section>
 
-      <div className={styles.nextCase}><HonigdachsProjectCard /></div>
+      <div className={styles.nextCase}><ZyvoProjectCard /></div>
 
     </main>
     <Footer />

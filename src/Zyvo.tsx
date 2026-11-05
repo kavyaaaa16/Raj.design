@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Footer } from './components/Footer';
 import { Dock } from './components/Dock';
 import { Figure } from './components/ui/Figure';
-import { HonigdachsProjectCard } from './components/Work';
+import { CgfProjectCard } from './components/Work';
 import { RiseText, TypewriterText } from './components/ScrollText';
 import styles from './Zyvo.module.css';
 
@@ -121,7 +121,7 @@ export default function Zyvo() {
         </div>
       </section>
 
-      <div className={styles.nextCase}><HonigdachsProjectCard /></div>
+      <div className={styles.nextCase}><CgfProjectCard /></div>
     </main>
     <Footer />
     <Dock />

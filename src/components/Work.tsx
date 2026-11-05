@@ -27,27 +27,21 @@ interface Project {
   rotate: number;
   clipRotate: number;
   href: string;
+  fullCard?: boolean;
+  comingSoon?: boolean;
 }
 
+const HONIGDACHS_NEXT_PROJECT: Project = {
+  title: 'Honigdachs',
+  tags: ['Website Design', 'Figma', '2026'],
+  image: 'workHonigdachs',
+  clip: 'paperclipRed',
+  rotate: -3.12,
+  clipRotate: -20,
+  href: '#',
+};
+
 const PROJECTS: Project[] = [
-  {
-    title: 'TechExpo Gujarat',
-    tags: ['Branding & Website', 'Figma', '2026'],
-    image: 'workTechExpo',
-    clip: 'paperclipBlue',
-    rotate: 7.65,
-    clipRotate: -20,
-    href: '#',
-  },
-  {
-    title: 'Honigdachs',
-    tags: ['Website Design', 'Figma', '2026'],
-    image: 'workHonigdachs',
-    clip: 'paperclipRed',
-    rotate: -3.12,
-    clipRotate: -20,
-    href: '#',
-  },
   {
     title: 'Alexandre Christie',
     tags: ['Visual Concept', 'Figma', '2026'],
@@ -67,22 +61,37 @@ const PROJECTS: Project[] = [
     href: `${import.meta.env.BASE_URL}#project=zyvo`,
   },
   {
-    title: 'HealthFit',
-    tags: ['Branding & App', 'Figma', '2026'],
-    image: 'workHealthFit',
+    title: 'CGF',
+    tags: ['Website Design', 'Figma', '2026'],
+    image: 'workCgfCard',
     clip: 'paperclipBlue',
-    rotate: 7.65,
-    clipRotate: -20,
-    href: '#',
+    rotate: 0,
+    clipRotate: 0,
+    href: `${import.meta.env.BASE_URL}#work`,
+    fullCard: true,
+    comingSoon: true,
   },
   {
-    title: 'Miro',
-    tags: ['Brand Identity', 'Photoshop', '2026'],
-    image: 'workMiro',
-    clip: 'paperclipRed',
-    rotate: -7,
-    clipRotate: -20,
-    href: '#',
+    title: 'TechExpo Gujarat',
+    tags: ['Branding & Website', 'Figma', '2026'],
+    image: 'workTechExpoCard',
+    clip: 'paperclipBlue',
+    rotate: 0,
+    clipRotate: 0,
+    href: `${import.meta.env.BASE_URL}#work`,
+    fullCard: true,
+    comingSoon: true,
+  },
+  {
+    title: 'Unboxing Community',
+    tags: ['App', 'Figma', '2024'],
+    image: 'workUnboxingCommunityCard',
+    clip: 'paperclipBlue',
+    rotate: 0,
+    clipRotate: 0,
+    href: `${import.meta.env.BASE_URL}#work`,
+    fullCard: true,
+    comingSoon: true,
   },
 ];
 
@@ -127,7 +136,7 @@ function ProjectCard({ project, index, smallScreen, animated = true }: { project
 
   return (
     <motion.article
-      className={styles.card}
+        className={`${styles.card} ${project.fullCard ? styles.fullCard : ''}`}
       variants={shouldAnimate ? projectEntrance(project.rotate, index, smallScreen ? 24 : 80) : undefined}
       initial={shouldAnimate ? 'hidden' : undefined}
       whileInView={shouldAnimate ? 'visible' : undefined}
@@ -137,10 +146,16 @@ function ProjectCard({ project, index, smallScreen, animated = true }: { project
       transition={shouldAnimate ? { duration: 0.45, ease: EASE_OUT } : undefined}
     >
       <a
-        className={styles.link}
+        className={`${styles.link} ${project.fullCard ? styles.fullCardLink : ''}`}
         href={project.href}
+        aria-disabled={project.comingSoon || undefined}
+        tabIndex={project.comingSoon ? -1 : undefined}
         aria-label={`${project.title} — ${project.tags.join(', ')}`}
         onClick={(event) => {
+          if (project.comingSoon) {
+            event.preventDefault();
+            return;
+          }
           if (!project.href.includes('#project=') || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
           event.preventDefault();
           stopSmoothScroll();
@@ -148,39 +163,56 @@ function ProjectCard({ project, index, smallScreen, animated = true }: { project
           window.dispatchEvent(new PopStateEvent('popstate'));
         }}
       >
-        <div className={styles.chrome} aria-hidden="true">
-          <span className={`${styles.light} ${styles.red}`} />
-          <span className={`${styles.light} ${styles.amber}`} />
-          <span className={`${styles.light} ${styles.green}`} />
-        </div>
+        {project.fullCard ? <>
+          <Figure name={project.image} alt="" className={`${styles.fullCardShot} ${project.comingSoon ? styles.comingSoonImage : ''}`} />
+          {project.comingSoon && <div className={styles.comingSoonOverlay} aria-hidden="true"><span className={styles.comingSoonMessage}><svg viewBox="0 0 24 24"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12Z" /><circle cx="12" cy="12" r="2.5" /><path d="m3 3 18 18" /></svg><span>COMING SOON</span></span></div>}
+        </> : <>
+          <div className={styles.chrome} aria-hidden="true">
+            <span className={`${styles.light} ${styles.red}`} />
+            <span className={`${styles.light} ${styles.amber}`} />
+            <span className={`${styles.light} ${styles.green}`} />
+          </div>
 
-        <div className={styles.screen}>
-          <Figure name={project.image} alt="" className={styles.shot} />
-        </div>
+          <div className={styles.screen}>
+            <Figure name={project.image} alt="" className={styles.shot} />
+          </div>
 
-        <footer className={styles.meta}>
-          <h3 className={styles.title}>{project.title}</h3>
-          <ul className={styles.tags}>
-            {project.tags.map((tag) => (
-              <li key={tag}>{tag}</li>
-            ))}
-          </ul>
-        </footer>
+          <footer className={styles.meta}>
+            <h3 className={styles.title}>{project.title}</h3>
+            <ul className={styles.tags}>
+              {project.tags.map((tag) => (
+                <li key={tag}>{tag}</li>
+              ))}
+            </ul>
+          </footer>
+        </>}
       </a>
 
-      <Figure
+      {!project.fullCard && <Figure
         name={project.clip}
         alt=""
         className={styles.clip}
         style={{ rotate: `${project.clipRotate}deg` }}
-      />
+      />}
     </motion.article>
   );
 }
 
 export function HonigdachsProjectCard() {
   const smallScreen = useSmallScreen();
-  const project = PROJECTS.find((item) => item.title === 'Honigdachs');
+  return <ProjectCard project={{ ...HONIGDACHS_NEXT_PROJECT, href: `${import.meta.env.BASE_URL}#work` }} index={1} smallScreen={smallScreen} animated={false} />;
+}
+
+export function ZyvoProjectCard() {
+  const smallScreen = useSmallScreen();
+  const project = PROJECTS.find((item) => item.title === 'ZYVO');
+  if (!project) return null;
+  return <ProjectCard project={project} index={1} smallScreen={smallScreen} animated={false} />;
+}
+
+export function CgfProjectCard() {
+  const smallScreen = useSmallScreen();
+  const project = PROJECTS.find((item) => item.title === 'CGF');
   if (!project) return null;
   return <ProjectCard project={{ ...project, href: `${import.meta.env.BASE_URL}#work` }} index={1} smallScreen={smallScreen} animated={false} />;
 }
